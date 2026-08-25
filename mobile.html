@@ -48,7 +48,7 @@
      card, on a ground that's #06122A both inside and outside it -- nothing
      renders past the border's own edge. */
   .v-page{ height:100%; min-height:100vh; margin:0; background:var(--v-ink); display:flex; align-items:center; justify-content:center; padding:14px; }
-  .v-surface{ position:relative; width:100%; max-width:420px; height:100%; max-height:760px; background:var(--v-ink); border:1px solid var(--v-line-soft); border-radius:var(--v-r-marketing-lg); display:flex; flex-direction:column; padding:16px 18px; overflow:hidden; }
+  .v-surface{ position:relative; width:100%; max-width:420px; height:100%; max-height:760px; min-width:0; background:var(--v-ink); border:1px solid var(--v-line-soft); border-radius:var(--v-r-marketing-lg); display:flex; flex-direction:column; padding:16px 18px; overflow:hidden; }
 
   .v-rail{ display:flex; align-items:center; gap:6px; margin-bottom:16px; flex:none; }
   .v-rail-step{ flex:1; height:24px; display:flex; align-items:center; background:none; border:none; padding:0; cursor:pointer; }
@@ -57,13 +57,13 @@
   .v-rail-bar i{ position:absolute; inset:0; background:var(--v-aperture); transform:scaleX(0); transform-origin:left; transition:transform .3s var(--v-motion); display:block; }
   .v-rail-step.active .v-rail-bar{ background:rgba(73,196,241,.22); }
 
-  .v-viewport{ position:relative; flex:1; display:flex; }
-  .v-stage{ position:absolute; inset:0; opacity:0; transform:translateY(10px); transition:opacity .38s var(--v-motion), transform .38s var(--v-motion); pointer-events:none; display:flex; flex-direction:column; }
-  .v-stage.active{ opacity:1; transform:translateY(0); pointer-events:auto; position:relative; flex:1; }
+  .v-viewport{ position:relative; flex:1; display:flex; min-width:0; }
+  .v-stage{ position:absolute; inset:0; opacity:0; transform:translateY(10px); transition:opacity .38s var(--v-motion), transform .38s var(--v-motion); pointer-events:none; display:flex; flex-direction:column; min-width:0; }
+  .v-stage.active{ opacity:1; transform:translateY(0); pointer-events:auto; position:relative; flex:1; min-width:0; }
 
   .v-eyebrow{ font-family:var(--v-mono); font-size:11px; font-weight:500; color:var(--v-text-faint); letter-spacing:.08em; margin:0 0 4px; text-transform:uppercase; }
   .v-h{ font-family:var(--v-sans); font-size:15px; font-weight:500; color:var(--v-white); margin:0 0 8px; }
-  .v-body{ flex:1; display:flex; flex-direction:column; justify-content:flex-start; padding-top:2px; padding-bottom:8px; min-height:0; overflow-y:auto; }
+  .v-body{ flex:1; display:flex; flex-direction:column; justify-content:flex-start; padding-top:2px; padding-bottom:8px; min-height:0; min-width:0; overflow-y:auto; }
 
   /* ---- screen 1: detected — the value proposition leads, the exception
      is the product surfacing what changed, not a queue of problems ---- */
@@ -82,15 +82,15 @@
   .v-pill{ font-family:var(--v-mono); font-size:11px; font-weight:500; letter-spacing:.04em; padding:6px 10px; border-radius:var(--v-r-product); flex:none; color:var(--v-review); background:rgba(255,176,32,.13); }
 
   /* ---- screen 2: evidence ---- */
-  .v-fee-compare{ display:flex; align-items:flex-end; gap:26px; }
-  .v-fee-block-label{ font-family:var(--v-mono); font-size:11px; font-weight:500; color:var(--v-text-faint); letter-spacing:.05em; margin-bottom:7px; text-transform:uppercase; }
-  .v-fee-block-value{ font-family:var(--v-mono); font-size:36px; font-weight:500; color:var(--v-white); line-height:1; letter-spacing:-0.01em; }
+  .v-fee-compare{ display:flex; align-items:flex-end; gap:14px; }
+  .v-fee-block-label{ font-family:var(--v-mono); font-size:11px; font-weight:500; color:var(--v-text-faint); letter-spacing:.05em; margin-bottom:6px; text-transform:uppercase; }
+  .v-fee-block-value{ font-family:var(--v-mono); font-size:28px; font-weight:500; color:var(--v-white); line-height:1; letter-spacing:-0.01em; }
   .v-fee-block-value.review{ color:var(--v-review); }
-  .v-fee-arrow{ font-family:var(--v-mono); font-size:20px; color:var(--v-text-faint); padding-bottom:5px; }
+  .v-fee-arrow{ font-family:var(--v-mono); font-size:16px; color:var(--v-text-faint); padding-bottom:4px; }
 
   /* secondary commercial signals: smaller type, divided off from the fee
      comparison above so depth doesn't compete with it for attention */
-  .v-commercial-row{ display:flex; gap:24px; margin-top:14px; padding-top:12px; border-top:1px solid var(--v-line-soft); }
+  .v-commercial-row{ display:flex; gap:20px; margin-top:12px; padding-top:11px; border-top:1px solid var(--v-line-soft); }
   .v-commercial-value{ font-family:var(--v-mono); font-size:14px; font-weight:500; color:var(--v-white); }
   .v-commercial-value span{ font-size:10px; color:var(--v-text-faint); font-weight:500; }
 
