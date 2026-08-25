@@ -46,13 +46,12 @@
      Card sits flush at the page ground colour (#06122A) rather than
      stepping up to Ink Raised -- the card fills virtually the whole visible
      surface here, so any lighter tone reads as "the background is wrong"
-     even though the page itself was always #06122A. The graduation edge
-     (brand toolkit §02, exception 01) -- a 1px inset highlight at 14% white
-     along the top edge only -- becomes the sole demarcation of the card,
-     which is exactly what it's for: a machined edge catching light, not a
-     shadow. v-line-soft is already exactly that 14%-white value. */
+     even though the page itself was always #06122A. A full 1px hairline
+     border (v-line-soft, the same 14%-white value used everywhere else in
+     the system) demarcates the card on all four sides -- a plain border,
+     not a box-shadow, so nothing renders past its own edge. */
   .v-showcase{ width:100%; max-width:840px; container-type:inline-size; }
-  .v-card{ background:var(--v-ink); border-radius:var(--v-r-marketing-lg); padding:28px; box-shadow:inset 0 1px 0 0 var(--v-line-soft); }
+  .v-card{ background:var(--v-ink); border-radius:var(--v-r-marketing-lg); padding:28px; border:1px solid var(--v-line-soft); }
 
   /* ---- persistent workflow rail ----
      Sweep-fill segmented bars read as "this advances on its own" rather than
