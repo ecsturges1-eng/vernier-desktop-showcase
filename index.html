@@ -67,7 +67,7 @@
   .v-rail-step.active .v-rail-label{ color:var(--v-aperture); }
   .v-rail-step.done .v-rail-label{ color:var(--v-text-dim); }
 
-  .v-viewport{ position:relative; min-height:436px; }
+  .v-viewport{ position:relative; height:540px; overflow:hidden; }
   .v-stage{ position:absolute; inset:0; opacity:0; transform:translateY(6px); transition:opacity .32s var(--v-motion), transform .32s var(--v-motion); pointer-events:none; }
   .v-stage.active{ opacity:1; transform:translateY(0); pointer-events:auto; position:relative; }
 
@@ -241,9 +241,8 @@
   @container (max-width:640px){
     .v-split{ grid-template-columns:1fr; }
   }
-  @media (max-width:720px){
+  @media (max-width:480px){
     .v-showcase{ max-width:none; }
-    .v-split{ grid-template-columns:1fr; }
   }
 </style>
 </head>
