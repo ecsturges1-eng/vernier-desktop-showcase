@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vernier — mobile product showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* Vernier brand toolkit v3.0 tokens. Full-bleed product surface, one
+     dominant number per screen, with a structured/tappable evidence layer
+     beneath it — a decision system you can inspect, not a slideshow.
+     Brought in line with the desktop showcase: the value proposition leads
+     stage one, a confidence ring and a rationale disclosure land on the
+     recommendation, a named next-approver anchors governance, and the card
+     carries the brand toolkit's full hairline border on a flush #06122A
+     ground rather than floating on a lighter "raised" tone. */
+  :root{
+    --v-ink:#06122A;
+    --v-ink-raised:#0E1E3A;
+    --v-white:#FFFFFF;
+    --v-mist:#C3CEDE;
+    --v-aperture:#49C4F1;
+    --v-aperture-deep:#2FA6D4;
+    --v-pass:#16D97A;
+    --v-review:#FFB020;
+    --v-text-dim:#C3CEDE;
+    --v-text-faint:rgba(195,206,222,.70);
+    --v-line-soft:rgba(255,255,255,.14);
+    --v-motion:cubic-bezier(.2,0,.1,1);
+    --v-r-product:3px;
+    --v-r-marketing-lg:10px;
+    --v-sans:'Open Sauce Sans','Helvetica Neue',Arial,sans-serif;
+    --v-mono:'IBM Plex Mono',monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0; background:var(--v-ink); color:var(--v-white);
+    font-family:var(--v-sans); -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---- page ground + bordered card ----
+     Same treatment as the desktop showcase: a full 1px hairline border
+     (v-line-soft, brand toolkit's 14%-white value) all the way round the
+     card, on a ground that's #06122A both inside and outside it -- nothing
+     renders past the border's own edge. */
+  .v-page{ height:100%; min-height:100vh; margin:0; background:var(--v-ink); display:flex; align-items:center; justify-content:center; padding:14px; }
+  .v-surface{ position:relative; width:100%; max-width:420px; height:100%; max-height:760px; background:var(--v-ink); border:1px solid var(--v-line-soft); border-radius:var(--v-r-marketing-lg); display:flex; flex-direction:column; padding:16px 18px; overflow:hidden; }
+
+  .v-rail{ display:flex; align-items:center; gap:6px; margin-bottom:16px; flex:none; }
+  .v-rail-step{ flex:1; height:24px; display:flex; align-items:center; background:none; border:none; padding:0; cursor:pointer; }
+  .v-rail-step:focus-visible{ outline:2px solid var(--v-aperture); outline-offset:2px; border-radius:2px; }
+  .v-rail-bar{ width:100%; height:2.5px; background:var(--v-line-soft); border-radius:2px; position:relative; overflow:hidden; }
+  .v-rail-bar i{ position:absolute; inset:0; background:var(--v-aperture); transform:scaleX(0); transform-origin:left; transition:transform .3s var(--v-motion); display:block; }
+  .v-rail-step.active .v-rail-bar{ background:rgba(73,196,241,.22); }
+
+  .v-viewport{ position:relative; flex:1; display:flex; }
+  .v-stage{ position:absolute; inset:0; opacity:0; transform:translateY(10px); transition:opacity .38s var(--v-motion), transform .38s var(--v-motion); pointer-events:none; display:flex; flex-direction:column; }
+  .v-stage.active{ opacity:1; transform:translateY(0); pointer-events:auto; position:relative; flex:1; }
+
+  .v-eyebrow{ font-family:var(--v-mono); font-size:11px; font-weight:500; color:var(--v-text-faint); letter-spacing:.08em; margin:0 0 4px; text-transform:uppercase; }
+  .v-h{ font-family:var(--v-sans); font-size:15px; font-weight:500; color:var(--v-white); margin:0 0 8px; }
+  .v-body{ flex:1; display:flex; flex-direction:column; justify-content:flex-start; padding-top:2px; padding-bottom:8px; min-height:0; overflow-y:auto; }
+
+  /* ---- screen 1: detected — the value proposition leads, the exception
+     is the product surfacing what changed, not a queue of problems ---- */
+  .v-hero-stat{ display:flex; align-items:center; gap:13px; padding:13px 15px; margin-top:2px; border:1px solid rgba(22,217,122,.4); border-radius:var(--v-r-product); background:rgba(22,217,122,.06); opacity:0; transform:translateY(6px); transition:opacity .4s var(--v-motion) .1s, transform .4s var(--v-motion) .1s; }
+  .v-stage.active .v-hero-stat{ opacity:1; transform:translateY(0); }
+  .v-hero-num-sm{ font-family:var(--v-mono); font-weight:500; color:var(--v-pass); font-size:30px; line-height:1; letter-spacing:-0.01em; flex:none; }
+  .v-hero-num-sm small{ font-family:var(--v-mono); font-size:12px; font-weight:500; color:var(--v-text-faint); margin-left:1px; }
+  .v-hero-label{ font-family:var(--v-mono); font-size:9.5px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--v-pass); margin:0 0 3px; }
+  .v-hero-sub{ font-family:var(--v-sans); font-size:11px; color:var(--v-text-dim); line-height:1.4; margin:0; }
+  .v-shift-label{ font-family:var(--v-mono); font-size:10px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--v-review); margin:16px 0 0; opacity:0; transition:opacity .4s var(--v-motion) .18s; }
+  .v-stage.active .v-shift-label{ opacity:1; }
+  .v-detail-line{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:8px; padding-top:12px; border-top:1px solid var(--v-line-soft); opacity:0; transform:translateY(6px); transition:opacity .4s var(--v-motion) .25s, transform .4s var(--v-motion) .25s; }
+  .v-stage.active .v-detail-line{ opacity:1; transform:translateY(0); }
+  .v-detail-fund{ font-family:var(--v-sans); font-size:15px; font-weight:500; color:var(--v-white); }
+  .v-detail-sub{ font-family:var(--v-mono); font-size:12px; color:var(--v-text-dim); margin-top:3px; }
+  .v-pill{ font-family:var(--v-mono); font-size:11px; font-weight:500; letter-spacing:.04em; padding:6px 10px; border-radius:var(--v-r-product); flex:none; color:var(--v-review); background:rgba(255,176,32,.13); }
+
+  /* ---- screen 2: evidence ---- */
+  .v-fee-compare{ display:flex; align-items:flex-end; gap:26px; }
+  .v-fee-block-label{ font-family:var(--v-mono); font-size:11px; font-weight:500; color:var(--v-text-faint); letter-spacing:.05em; margin-bottom:7px; text-transform:uppercase; }
+  .v-fee-block-value{ font-family:var(--v-mono); font-size:36px; font-weight:500; color:var(--v-white); line-height:1; letter-spacing:-0.01em; }
+  .v-fee-block-value.review{ color:var(--v-review); }
+  .v-fee-arrow{ font-family:var(--v-mono); font-size:20px; color:var(--v-text-faint); padding-bottom:5px; }
+
+  /* secondary commercial signals: smaller type, divided off from the fee
+     comparison above so depth doesn't compete with it for attention */
+  .v-commercial-row{ display:flex; gap:24px; margin-top:14px; padding-top:12px; border-top:1px solid var(--v-line-soft); }
+  .v-commercial-value{ font-family:var(--v-mono); font-size:14px; font-weight:500; color:var(--v-white); }
+  .v-commercial-value span{ font-size:10px; color:var(--v-text-faint); font-weight:500; }
+
+  /* ---- shared: summary headline + structured tappable rows ---- */
+  .v-section{ margin-top:16px; padding-top:13px; border-top:1px solid var(--v-line-soft); opacity:0; transform:translateY(8px); transition:opacity .4s var(--v-motion) .3s, transform .4s var(--v-motion) .3s; }
+  .v-stage.active .v-section{ opacity:1; transform:translateY(0); }
+  .v-summary-head{ font-family:var(--v-sans); font-size:14px; font-weight:500; color:var(--v-white); margin:0 0 2px; }
+  .v-rows{ margin-top:4px; }
+  .v-row{ display:flex; align-items:center; gap:12px; padding:9px 0; border-top:1px solid var(--v-line-soft); cursor:pointer; background:none; border-left:none; border-right:none; border-bottom:none; width:100%; text-align:left; font-family:inherit; color:inherit; }
+  .v-row:first-child{ border-top:none; }
+  .v-row-icon{ flex:none; width:16px; height:16px; display:flex; align-items:center; justify-content:center; }
+  .v-row-dot{ width:6px; height:6px; border-radius:50%; }
+  .v-row-dot.pass{ background:var(--v-pass); }
+  .v-row-dot.review{ background:var(--v-review); }
+  .v-row-dot.neutral{ background:var(--v-mist); opacity:.5; }
+  .v-row-main{ flex:1; min-width:0; }
+  .v-row-title{ font-family:var(--v-sans); font-size:13.5px; font-weight:500; color:var(--v-white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .v-row-detail{ font-family:var(--v-sans); font-size:12px; color:var(--v-text-faint); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .v-row-meta{ flex:none; font-family:var(--v-mono); font-size:10.5px; color:var(--v-text-faint); text-align:right; }
+  .v-row-meta.review{ color:var(--v-review); }
+  .v-row-meta.pass{ color:var(--v-pass); }
+  .v-row-chevron{ flex:none; transition:transform .2s var(--v-motion); color:var(--v-text-faint); }
+  .v-row.open .v-row-chevron{ transform:rotate(90deg); }
+  .v-row-expand{ max-height:0; overflow:hidden; opacity:0; transition:max-height .3s var(--v-motion), opacity .25s var(--v-motion); }
+  .v-row-expand.open{ max-height:80px; opacity:1; }
+  .v-row-expand-inner{ font-family:var(--v-sans); font-size:12px; color:var(--v-text-dim); line-height:1.5; padding:0 0 13px 28px; }
+
+  /* shared text-button disclosure (rationale) -- same mechanic as the row
+     expand above, for a single piece of supporting copy rather than a list */
+  .v-btn-text{ background:none; border:none; padding:0; margin-top:14px; color:var(--v-aperture); font-family:var(--v-sans); font-size:11.5px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
+  .v-btn-text svg{ transition:transform .2s var(--v-motion); }
+  .v-btn-text.open svg{ transform:rotate(180deg); }
+  .v-disclose{ max-height:0; overflow:hidden; opacity:0; transition:max-height .3s var(--v-motion), opacity .26s var(--v-motion), margin-top .3s var(--v-motion); margin-top:0; }
+  .v-disclose.open{ opacity:1; margin-top:10px; }
+  .v-disclose p{ font-family:var(--v-sans); font-size:11.5px; color:var(--v-text-dim); line-height:1.55; margin:0; }
+
+  /* ---- screen 3: recommendation — the hero moment ---- */
+  .v-ai-tag{ display:inline-flex; align-items:center; font-family:var(--v-mono); font-size:10px; font-weight:500; color:var(--v-aperture); letter-spacing:.08em; margin-bottom:8px; }
+  .v-ai-gen{ font-family:var(--v-mono); font-size:13px; color:var(--v-text-faint); display:flex; align-items:center; gap:10px; }
+  .v-ai-gen-dot{ width:5px; height:5px; border-radius:50%; background:var(--v-aperture); animation:v-pulse 1s ease-in-out infinite; }
+  @keyframes v-pulse{ 0%,100%{ opacity:.3 } 50%{ opacity:1 } }
+  .v-ai-body{ opacity:0; transition:opacity .35s var(--v-motion); }
+  .v-ai-body.shown{ opacity:1; }
+  .v-ai-rec-h{ font-family:var(--v-sans); font-size:19px; font-weight:500; color:var(--v-white); margin:0 0 14px; line-height:1.25; letter-spacing:-0.01em; }
+  .v-upside-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+  .v-upside-label{ font-family:var(--v-mono); font-size:11px; font-weight:500; color:var(--v-text-faint); letter-spacing:.05em; margin-bottom:7px; text-transform:uppercase; }
+  .v-upside-value{ font-family:var(--v-mono); font-size:38px; font-weight:500; color:var(--v-pass); line-height:1; letter-spacing:-0.01em; }
+  .v-conf-wrap{ display:flex; flex-direction:column; align-items:flex-end; }
+  .v-conf-ring{ position:relative; width:44px; height:44px; }
+  .v-conf-ring svg{ transform:rotate(-90deg); display:block; }
+  .v-conf-ring-track{ fill:none; stroke:rgba(255,255,255,.16); stroke-width:5; }
+  .v-conf-ring-progress{ fill:none; stroke:var(--v-aperture); stroke-width:5; stroke-linecap:butt; stroke-dasharray:163.4; stroke-dashoffset:163.4; transition:stroke-dashoffset .85s var(--v-motion); }
+  .v-ai-body.shown .v-conf-ring-progress{ stroke-dashoffset:35.9; }
+  .v-conf-ring-num{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--v-mono); font-size:10px; font-weight:500; color:var(--v-aperture); }
+
+  /* ---- screen 4: approval ---- */
+  .v-confirm{ display:flex; align-items:center; gap:10px; opacity:0; transform:translateY(-6px); transition:opacity .35s var(--v-motion), transform .35s var(--v-motion); }
+  .v-confirm.shown{ opacity:1; transform:translateY(0); }
+  .v-confirm-text{ font-family:var(--v-sans); font-size:15px; font-weight:500; color:var(--v-pass); }
+  .v-gov-body{ opacity:0; transition:opacity .35s var(--v-motion); }
+  .v-gov-body.shown{ opacity:1; }
+  .v-gov-status-label{ font-family:var(--v-mono); font-size:9.5px; font-weight:500; color:var(--v-text-faint); letter-spacing:.06em; text-transform:uppercase; margin:18px 0 8px; }
+  .v-gov-status-row{ display:flex; flex-wrap:wrap; align-items:center; row-gap:4px; column-gap:8px; padding:10px 12px; border:1px solid var(--v-line-soft); border-radius:var(--v-r-product); }
+  .v-gov-status-name{ font-family:var(--v-sans); font-size:12.5px; font-weight:500; color:var(--v-white); }
+  .v-gov-status-role{ font-family:var(--v-mono); font-size:10.5px; color:var(--v-text-faint); }
+  .v-gov-status-flag{ margin-left:auto; font-family:var(--v-mono); font-size:10.5px; font-weight:500; color:var(--v-review); flex:none; }
+
+  /* ---- screen 5: outcome ---- */
+  .v-out-h{ font-family:var(--v-sans); font-size:20px; font-weight:500; color:var(--v-white); margin:0 0 4px; line-height:1.3; letter-spacing:-0.01em; }
+  .v-out-sub{ font-family:var(--v-sans); font-size:13.5px; color:var(--v-text-dim); line-height:1.5; margin:0; }
+  .v-file{ display:flex; align-items:center; gap:12px; margin-top:14px; opacity:0; transform:scale(.96); transition:opacity .4s var(--v-motion), transform .4s var(--v-motion); }
+  .v-file.shown{ opacity:1; transform:scale(1); }
+  .v-file-meta{ display:flex; flex-direction:column; gap:2px; }
+  .v-file-name{ font-family:var(--v-mono); font-size:13px; color:var(--v-white); }
+  .v-file-sub{ font-family:var(--v-mono); font-size:11px; color:var(--v-text-faint); }
+
+  @media (prefers-reduced-motion:reduce){
+    .v-stage, .v-hero-stat, .v-shift-label, .v-detail-line, .v-section, .v-ai-body, .v-confirm, .v-gov-body, .v-file, .v-row-expand, .v-disclose{ transition:none !important; }
+    .v-ai-gen-dot{ animation:none !important; }
+    .v-conf-ring-progress{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="v-page">
+  <div class="v-surface" id="v-card">
+
+    <div class="v-rail" id="v-rail" role="tablist" aria-label="Workflow progress">
+      <button class="v-rail-step" data-i="0" role="tab" id="v-tab-0" aria-selected="true" aria-controls="v-panel-0" aria-label="Detected"><span class="v-rail-bar"><i></i></span></button>
+      <button class="v-rail-step" data-i="1" role="tab" id="v-tab-1" aria-selected="false" aria-controls="v-panel-1" aria-label="Evidence"><span class="v-rail-bar"><i></i></span></button>
+      <button class="v-rail-step" data-i="2" role="tab" id="v-tab-2" aria-selected="false" aria-controls="v-panel-2" aria-label="Recommendation"><span class="v-rail-bar"><i></i></span></button>
+      <button class="v-rail-step" data-i="3" role="tab" id="v-tab-3" aria-selected="false" aria-controls="v-panel-3" aria-label="Approval"><span class="v-rail-bar"><i></i></span></button>
+      <button class="v-rail-step" data-i="4" role="tab" id="v-tab-4" aria-selected="false" aria-controls="v-panel-4" aria-label="Outcome"><span class="v-rail-bar"><i></i></span></button>
+    </div>
+
+    <div class="v-viewport">
+
+      <!-- 1. Detected -->
+      <section class="v-stage" data-stage="0" id="v-panel-0" role="tabpanel" aria-labelledby="v-tab-0">
+        <p class="v-eyebrow">Live monitoring</p>
+        <h2 class="v-h">Continuous fee monitoring</h2>
+        <div class="v-body">
+          <div class="v-hero-stat">
+            <div class="v-hero-num-sm">47<small>/48</small></div>
+            <div>
+              <div class="v-hero-label">Fee structures optimised</div>
+              <p class="v-hero-sub">Continuously assured against live market pricing.</p>
+            </div>
+          </div>
+          <p class="v-shift-label">Opportunity detected</p>
+          <div class="v-detail-line">
+            <div>
+              <div class="v-detail-fund">Investment Grade Corporate Bond Fund</div>
+              <div class="v-detail-sub">Priced 12bps below peer mean</div>
+            </div>
+            <span class="v-pill">Exception</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Evidence -->
+      <section class="v-stage" data-stage="1" id="v-panel-1" role="tabpanel" aria-labelledby="v-tab-1">
+        <p class="v-eyebrow">Evidence</p>
+        <div class="v-body">
+          <div class="v-fee-compare">
+            <div><div class="v-fee-block-label">Current</div><div class="v-fee-block-value review">46bps</div></div>
+            <div class="v-fee-arrow">→</div>
+            <div><div class="v-fee-block-label">Fair value</div><div class="v-fee-block-value">58bps</div></div>
+          </div>
+          <div class="v-commercial-row">
+            <div><div class="v-fee-block-label">Elasticity</div><div class="v-commercial-value">Low</div></div>
+            <div><div class="v-fee-block-label">Risk index</div><div class="v-commercial-value">12<span>/100</span></div></div>
+          </div>
+          <div class="v-section">
+            <p class="v-summary-head">2 signals support review</p>
+            <div class="v-rows">
+              <button class="v-row" data-row="0">
+                <span class="v-row-icon"><span class="v-row-dot review"></span></span>
+                <span class="v-row-main">
+                  <span class="v-row-title">Market intelligence</span>
+                  <span class="v-row-detail">Peer fees rose 4bps this quarter</span>
+                </span>
+                <span class="v-row-meta">2h ago</span>
+                <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <div class="v-row-expand" data-expand="0"><div class="v-row-expand-inner">Sourced from Vernier's live market intelligence feed, refreshed every two hours across covered peer funds.</div></div>
+              <button class="v-row" data-row="1">
+                <span class="v-row-icon"><span class="v-row-dot review"></span></span>
+                <span class="v-row-main">
+                  <span class="v-row-title">FCA fair-value guidance</span>
+                  <span class="v-row-detail">Fees must reflect value and cost of service</span>
+                </span>
+                <span class="v-row-meta">Aug 2026</span>
+                <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <div class="v-row-expand" data-expand="1"><div class="v-row-expand-inner">Effective policy text mapped directly to this fund's servicing cost trend for the review file.</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Recommendation -->
+      <section class="v-stage" data-stage="2" id="v-panel-2" role="tabpanel" aria-labelledby="v-tab-2">
+        <p class="v-eyebrow">Vernier recommends</p>
+        <div class="v-body">
+          <div class="v-ai-gen" id="v-ai-gen"><span class="v-ai-gen-dot"></span>Analysing evidence…</div>
+          <div class="v-ai-body" id="v-ai-body">
+            <span class="v-ai-tag">VERNIER AI</span>
+            <p class="v-ai-rec-h">Raise fee to 58bps at the Q1 2027 effective date</p>
+            <div class="v-upside-row">
+              <div>
+                <div class="v-upside-label">Annualised uplift</div>
+                <div class="v-upside-value" id="v-upside-num">£0k</div>
+              </div>
+              <div class="v-conf-wrap">
+                <div class="v-upside-label">Confidence</div>
+                <div class="v-conf-ring">
+                  <svg viewBox="0 0 64 64" width="44" height="44">
+                    <circle class="v-conf-ring-track" cx="32" cy="32" r="26"></circle>
+                    <circle class="v-conf-ring-progress" cx="32" cy="32" r="26"></circle>
+                  </svg>
+                  <span class="v-conf-ring-num" id="v-conf-num">0%</span>
+                </div>
+              </div>
+            </div>
+            <button class="v-btn-text" id="v-rationale-btn" aria-expanded="false" aria-controls="v-rationale">
+              Why this recommendation?
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="v-disclose" id="v-rationale">
+              <p>12bps below peer mean despite rising servicing costs. Q1 2027 alignment captures the full-year margin benefit and matches client renewal cycles.</p>
+            </div>
+            <div class="v-section">
+              <p class="v-summary-head">Based on 3 inputs</p>
+              <div class="v-rows">
+                <button class="v-row" data-row="2">
+                  <span class="v-row-icon"><span class="v-row-dot pass"></span></span>
+                  <span class="v-row-main">
+                    <span class="v-row-title">Peer benchmark</span>
+                    <span class="v-row-detail">58bps fair-value midpoint</span>
+                  </span>
+                  <span class="v-row-meta pass">Aligned</span>
+                  <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+                <div class="v-row-expand" data-expand="2"><div class="v-row-expand-inner">Calculated against the live peer set for this fund category, weighted by AUM.</div></div>
+                <button class="v-row" data-row="3">
+                  <span class="v-row-icon"><span class="v-row-dot pass"></span></span>
+                  <span class="v-row-main">
+                    <span class="v-row-title">Client renewal timing</span>
+                    <span class="v-row-detail">Q1 2027 effective date</span>
+                  </span>
+                  <span class="v-row-meta pass">Matches</span>
+                  <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+                <div class="v-row-expand" data-expand="3"><div class="v-row-expand-inner">Assumes no contractual renewal event occurs before the Q1 2027 effective date.</div></div>
+                <button class="v-row" data-row="4">
+                  <span class="v-row-icon"><span class="v-row-dot pass"></span></span>
+                  <span class="v-row-main">
+                    <span class="v-row-title">Policy status</span>
+                    <span class="v-row-detail">Fee-cap covenant clear</span>
+                  </span>
+                  <span class="v-row-meta pass">Pass</span>
+                  <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+                <div class="v-row-expand" data-expand="4"><div class="v-row-expand-inner">Checked automatically against this mandate's fee-cap covenant before the recommendation was drafted.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Approval -->
+      <section class="v-stage" data-stage="3" id="v-panel-3" role="tabpanel" aria-labelledby="v-tab-3">
+        <p class="v-eyebrow">Governance</p>
+        <div class="v-body">
+          <div class="v-confirm" id="v-confirm">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16D97A" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 12l5 5 11-11"/></svg>
+            <span class="v-confirm-text">Approval request created</span>
+          </div>
+          <div class="v-gov-body" id="v-gov-body">
+            <div class="v-gov-status-label">Next approval</div>
+            <div class="v-gov-status-row">
+              <span class="v-row-dot review"></span>
+              <span class="v-gov-status-name">Duncan Whitfield</span>
+              <span class="v-gov-status-role">Head of Pricing</span>
+              <span class="v-gov-status-flag">Awaiting</span>
+            </div>
+            <div class="v-section">
+              <p class="v-summary-head">1 approval awaiting · 2 controls passed</p>
+              <div class="v-rows">
+                <button class="v-row" data-row="5">
+                  <span class="v-row-icon"><span class="v-row-dot review"></span></span>
+                  <span class="v-row-main">
+                    <span class="v-row-title">Duncan Whitfield</span>
+                    <span class="v-row-detail">Head of Pricing</span>
+                  </span>
+                  <span class="v-row-meta review">Awaiting</span>
+                  <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+                <div class="v-row-expand" data-expand="5"><div class="v-row-expand-inner">Notified on request creation. Portfolio Manager sign-off is already complete.</div></div>
+                <button class="v-row" data-row="6">
+                  <span class="v-row-icon"><span class="v-row-dot pass"></span></span>
+                  <span class="v-row-main">
+                    <span class="v-row-title">Antitrust &amp; anti-coordination scan</span>
+                    <span class="v-row-detail">Ran automatically on submission</span>
+                  </span>
+                  <span class="v-row-meta pass">Pass</span>
+                  <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+                <div class="v-row-expand" data-expand="6"><div class="v-row-expand-inner">No coordination signals detected against comparable mandates in the current cycle.</div></div>
+                <button class="v-row" data-row="7">
+                  <span class="v-row-icon"><span class="v-row-dot pass"></span></span>
+                  <span class="v-row-main">
+                    <span class="v-row-title">Fee-cap covenant</span>
+                    <span class="v-row-detail">Ran automatically on submission</span>
+                  </span>
+                  <span class="v-row-meta pass">Pass</span>
+                  <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+                <div class="v-row-expand" data-expand="7"><div class="v-row-expand-inner">58bps sits within the client mandate's contractual fee-cap ceiling of 65bps.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Outcome -->
+      <section class="v-stage" data-stage="4" id="v-panel-4" role="tabpanel" aria-labelledby="v-tab-4">
+        <p class="v-eyebrow">Outcome</p>
+        <div class="v-body">
+          <p class="v-out-h">Decision-ready, with the evidence attached</p>
+          <p class="v-out-sub">Decision pack includes 6 evidence sources, 3 approvals, and a complete audit trail.</p>
+          <div class="v-file" id="v-file">
+            <svg width="20" height="24" viewBox="0 0 20 24" fill="none" stroke="var(--v-mist)" stroke-width="1.4"><path d="M2 1h11l5 5v17H2z"/><path d="M13 1v5h5"/></svg>
+            <div class="v-file-meta">
+              <span class="v-file-name">VER-2027-0091.pdf</span>
+              <span class="v-file-sub">Board paper · 31 Jan 2027</span>
+            </div>
+          </div>
+          <div class="v-section">
+            <div class="v-rows">
+              <button class="v-row" data-row="8">
+                <span class="v-row-icon"><span class="v-row-dot neutral"></span></span>
+                <span class="v-row-main">
+                  <span class="v-row-title">Evidence sources</span>
+                  <span class="v-row-detail">Market intelligence, FCA guidance +4</span>
+                </span>
+                <span class="v-row-meta">6</span>
+                <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <div class="v-row-expand" data-expand="8"><div class="v-row-expand-inner">Market intelligence, FCA guidance, and four supporting internal records.</div></div>
+              <button class="v-row" data-row="9">
+                <span class="v-row-icon"><span class="v-row-dot pass"></span></span>
+                <span class="v-row-main"><span class="v-row-title">Approvals</span></span>
+                <span class="v-row-meta">3</span>
+                <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <div class="v-row-expand" data-expand="9"><div class="v-row-expand-inner">Portfolio Manager, Head of Pricing, and Chief Risk Officer sign-off chain.</div></div>
+              <button class="v-row" data-row="10">
+                <span class="v-row-icon"><span class="v-row-dot neutral"></span></span>
+                <span class="v-row-main">
+                  <span class="v-row-title">Audit trail</span>
+                  <span class="v-row-detail">Detection to board paper</span>
+                </span>
+                <span class="v-row-meta">Complete</span>
+                <svg class="v-row-chevron" width="7" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <div class="v-row-expand" data-expand="10"><div class="v-row-expand-inner">Every input, check and decision timestamped from detection to board paper.</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+  </div>
+
+<script>
+(function(){
+  var card = document.getElementById('v-card');
+  var stages = Array.prototype.slice.call(card.querySelectorAll('.v-stage'));
+  var railSteps = Array.prototype.slice.call(card.querySelectorAll('.v-rail-step'));
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var DURATIONS = [4200, 5800, 7200, 6000, 4600];
+  var current = 0, advanceTimer = null;
+  var remaining = 0, stageStartedAt = 0;
+
+  var pauseReasons = new Set();
+  function setPaused(reason, on){
+    if (on) pauseReasons.add(reason); else pauseReasons.delete(reason);
+    if (pauseReasons.size > 0){
+      clearTimeout(advanceTimer);
+      remaining -= (Date.now() - stageStartedAt);
+      if (remaining < 0) remaining = 0;
+      pauseRailFill();
+    } else {
+      scheduleNext();
+    }
+  }
+
+  /* The rail communicates "this advances on its own" rather than "click me":
+     each segment sweeps fill over the exact duration of its own stage, so
+     the fill completing IS the cause of the next transition, not decoration. */
+  function updateRail(i){
+    railSteps.forEach(function(s, si){
+      s.classList.toggle('active', si === i);
+      s.classList.toggle('done', si < i);
+      s.setAttribute('aria-selected', si === i ? 'true' : 'false');
+      s.setAttribute('tabindex', si === i ? '0' : '-1');
+      var bar = s.querySelector('.v-rail-bar i');
+      if (si < i){
+        bar.style.transitionDuration = '.3s';
+        bar.style.transitionTimingFunction = '';
+        bar.style.transform = 'scaleX(1)';
+      } else if (si > i){
+        bar.style.transitionDuration = '.3s';
+        bar.style.transitionTimingFunction = '';
+        bar.style.transform = 'scaleX(0)';
+      } else {
+        bar.style.transitionDuration = '0s';
+        bar.style.transform = reduced ? 'scaleX(1)' : 'scaleX(0)';
+      }
+    });
+  }
+
+  function activeBar(){
+    return card.querySelector('.v-rail-step.active .v-rail-bar i');
+  }
+
+  /* Freeze the sweep at the mathematically exact point in the countdown
+     (elapsed / total), computed straight from the same clock the advance
+     timer uses -- not by reading the transition's computed transform back
+     out and regex-parsing the matrix, which only ever approximates the
+     true position and, being read mid-transition, could catch a stale or
+     half-updated value and make the bar visibly hop out of sync with where
+     the timer actually was. */
+  function pauseRailFill(){
+    var bar = activeBar();
+    if (!bar) return;
+    var total = DURATIONS[current];
+    var elapsed = Date.now() - stageStartedAt;
+    var pct = total > 0 ? Math.min(1, Math.max(0, elapsed / total)) : 1;
+    bar.style.transitionDuration = '0s';
+    bar.style.transform = 'scaleX(' + pct + ')';
+  }
+
+  function resumeRailFill(ms){
+    var bar = activeBar();
+    if (!bar || reduced) return;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        bar.style.transitionDuration = ms + 'ms';
+        bar.style.transitionTimingFunction = 'linear';
+        bar.style.transform = 'scaleX(1)';
+      });
+    });
+  }
+
+  function countUp(el, target, prefix, suffix, duration){
+    var start = null;
+    function step(ts){
+      if (!start) start = ts;
+      var p = Math.min(1, (ts - start) / duration);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  var aiTimer = null, confirmTimer = null, govBodyTimer = null, fileTimer = null;
+  function resetStageFX(){
+    clearTimeout(aiTimer); clearTimeout(confirmTimer); clearTimeout(govBodyTimer); clearTimeout(fileTimer);
+    document.getElementById('v-ai-body').classList.remove('shown');
+    document.getElementById('v-ai-gen').style.display = '';
+    document.getElementById('v-upside-num').textContent = '£0k';
+    document.getElementById('v-conf-num').textContent = '0%';
+    document.getElementById('v-confirm').classList.remove('shown');
+    document.getElementById('v-gov-body').classList.remove('shown');
+    document.getElementById('v-file').classList.remove('shown');
+  }
+
+  /* Every disclosure (evidence rows, the recommendation rationale) resets to
+     closed on any stage change, and releases whatever pause reason it was
+     holding -- otherwise a row left open on a stage the user has since left
+     could silently stall autoplay forever. */
+  function resetDisclosures(){
+    card.querySelectorAll('.v-row.open').forEach(function(r){ r.classList.remove('open'); });
+    card.querySelectorAll('.v-row-expand.open').forEach(function(p){ p.classList.remove('open'); });
+    card.querySelectorAll('.v-disclose.open').forEach(function(p){ p.classList.remove('open'); });
+    card.querySelectorAll('.v-btn-text.open').forEach(function(b){ b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); });
+    pauseReasons.delete('rows');
+    pauseReasons.delete('rationale');
+  }
+
+  function runStageFX(i){
+    if (i === 2){
+      var reveal = function(){
+        document.getElementById('v-ai-gen').style.display = 'none';
+        document.getElementById('v-ai-body').classList.add('shown');
+        if (reduced){
+          document.getElementById('v-upside-num').textContent = '£408k';
+          document.getElementById('v-conf-num').textContent = '78%';
+        } else {
+          countUp(document.getElementById('v-upside-num'), 408, '£', 'k', 900);
+          countUp(document.getElementById('v-conf-num'), 78, '', '%', 900);
+        }
+      };
+      if (reduced) reveal(); else aiTimer = setTimeout(reveal, 900);
+    }
+    if (i === 3){
+      if (reduced){
+        document.getElementById('v-confirm').classList.add('shown');
+        document.getElementById('v-gov-body').classList.add('shown');
+      } else {
+        confirmTimer = setTimeout(function(){ document.getElementById('v-confirm').classList.add('shown'); }, 150);
+        govBodyTimer = setTimeout(function(){ document.getElementById('v-gov-body').classList.add('shown'); }, 650);
+      }
+    }
+    if (i === 4){
+      if (reduced) document.getElementById('v-file').classList.add('shown');
+      else fileTimer = setTimeout(function(){ document.getElementById('v-file').classList.add('shown'); }, 350);
+    }
+  }
+
+  function activate(i){
+    stages.forEach(function(s, si){ s.classList.toggle('active', si === i); });
+    current = i;
+    remaining = DURATIONS[i];
+    updateRail(i);
+    resetStageFX();
+    resetDisclosures();
+    runStageFX(i);
+  }
+
+  function scheduleNext(){
+    clearTimeout(advanceTimer);
+    if (reduced || pauseReasons.size > 0) return;
+    stageStartedAt = Date.now();
+    advanceTimer = setTimeout(function(){
+      goToInternal((current + 1) % stages.length);
+    }, remaining);
+    resumeRailFill(remaining);
+  }
+
+  function goToInternal(i){ activate(i); scheduleNext(); }
+  function goTo(i){ clearTimeout(advanceTimer); activate(i); scheduleNext(); }
+
+  railSteps.forEach(function(s){ s.addEventListener('click', function(){ goTo(+s.dataset.i); }); });
+  document.getElementById('v-rail').addEventListener('keydown', function(e){
+    var idx = railSteps.indexOf(document.activeElement);
+    if (idx === -1) return;
+    var next = null;
+    if (e.key === 'ArrowRight') next = (idx + 1) % railSteps.length;
+    else if (e.key === 'ArrowLeft') next = (idx - 1 + railSteps.length) % railSteps.length;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = railSteps.length - 1;
+    if (next !== null){
+      e.preventDefault();
+      goTo(next);
+      railSteps[next].focus();
+    }
+  });
+
+  function wireExpand(btnId, panelId, pauseReason){
+    var btn = document.getElementById(btnId);
+    var panel = document.getElementById(panelId);
+    btn.addEventListener('click', function(){
+      var open = panel.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      setPaused(pauseReason, open);
+    });
+  }
+  wireExpand('v-rationale-btn', 'v-rationale', 'rationale');
+
+  card.querySelectorAll('.v-row').forEach(function(row){
+    row.addEventListener('click', function(){
+      var id = row.dataset.row;
+      var panel = card.querySelector('.v-row-expand[data-expand="' + id + '"]');
+      var open = row.classList.toggle('open');
+      panel.classList.toggle('open', open);
+      var anyOpen = card.querySelector('.v-row.open') !== null;
+      setPaused('rows', anyOpen);
+      /* Touch devices keep :focus on a tapped button until something else
+         claims it — blur immediately so a closed row can't leave autoplay
+         paused via a lingering 'focus' reason nothing will ever clear. */
+      row.blur();
+    });
+  });
+
+  card.addEventListener('mouseenter', function(){ setPaused('hover', true); });
+  card.addEventListener('mouseleave', function(){ setPaused('hover', false); });
+
+  card.addEventListener('focusin', function(){ setPaused('focus', true); });
+  card.addEventListener('focusout', function(e){
+    if (!card.contains(e.relatedTarget)) setPaused('focus', false);
+  });
+
+  activate(0);
+  scheduleNext();
+})();
+</script>
+
+</body>
+</html>
