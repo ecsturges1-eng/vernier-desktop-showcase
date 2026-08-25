@@ -95,11 +95,11 @@
   .v-commercial-value span{ font-size:10px; color:var(--v-text-faint); font-weight:500; }
 
   /* ---- shared: summary headline + structured tappable rows ---- */
-  .v-section{ margin-top:16px; padding-top:13px; border-top:1px solid var(--v-line-soft); opacity:0; transform:translateY(8px); transition:opacity .4s var(--v-motion) .3s, transform .4s var(--v-motion) .3s; }
+  .v-section{ margin-top:13px; padding-top:11px; border-top:1px solid var(--v-line-soft); opacity:0; transform:translateY(8px); transition:opacity .4s var(--v-motion) .3s, transform .4s var(--v-motion) .3s; }
   .v-stage.active .v-section{ opacity:1; transform:translateY(0); }
   .v-summary-head{ font-family:var(--v-sans); font-size:14px; font-weight:500; color:var(--v-white); margin:0 0 2px; }
-  .v-rows{ margin-top:4px; }
-  .v-row{ display:flex; align-items:center; gap:12px; padding:9px 0; border-top:1px solid var(--v-line-soft); cursor:pointer; background:none; border-left:none; border-right:none; border-bottom:none; width:100%; text-align:left; font-family:inherit; color:inherit; }
+  .v-rows{ margin-top:2px; }
+  .v-row{ display:flex; align-items:center; gap:12px; padding:7px 0; border-top:1px solid var(--v-line-soft); cursor:pointer; background:none; border-left:none; border-right:none; border-bottom:none; width:100%; text-align:left; font-family:inherit; color:inherit; }
   .v-row:first-child{ border-top:none; }
   .v-row-icon{ flex:none; width:16px; height:16px; display:flex; align-items:center; justify-content:center; }
   .v-row-dot{ width:6px; height:6px; border-radius:50%; }
@@ -120,12 +120,12 @@
 
   /* shared text-button disclosure (rationale) -- same mechanic as the row
      expand above, for a single piece of supporting copy rather than a list */
-  .v-btn-text{ background:none; border:none; padding:0; margin-top:14px; color:var(--v-aperture); font-family:var(--v-sans); font-size:11.5px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
+  .v-btn-text{ background:none; border:none; padding:0; margin-top:10px; color:var(--v-aperture); font-family:var(--v-sans); font-size:11.5px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
   .v-btn-text svg{ transition:transform .2s var(--v-motion); }
   .v-btn-text.open svg{ transform:rotate(180deg); }
   .v-disclose{ max-height:0; overflow:hidden; opacity:0; transition:max-height .3s var(--v-motion), opacity .26s var(--v-motion), margin-top .3s var(--v-motion); margin-top:0; }
-  .v-disclose.open{ opacity:1; margin-top:10px; }
-  .v-disclose p{ font-family:var(--v-sans); font-size:11.5px; color:var(--v-text-dim); line-height:1.55; margin:0; }
+  .v-disclose.open{ max-height:64px; opacity:1; margin-top:7px; }
+  .v-disclose p{ font-family:var(--v-sans); font-size:11.5px; color:var(--v-text-dim); line-height:1.45; margin:0; }
 
   /* ---- screen 3: recommendation — the hero moment ---- */
   .v-ai-tag{ display:inline-flex; align-items:center; font-family:var(--v-mono); font-size:10px; font-weight:500; color:var(--v-aperture); letter-spacing:.08em; margin-bottom:8px; }
@@ -134,12 +134,12 @@
   @keyframes v-pulse{ 0%,100%{ opacity:.3 } 50%{ opacity:1 } }
   .v-ai-body{ opacity:0; transition:opacity .35s var(--v-motion); }
   .v-ai-body.shown{ opacity:1; }
-  .v-ai-rec-h{ font-family:var(--v-sans); font-size:19px; font-weight:500; color:var(--v-white); margin:0 0 14px; line-height:1.25; letter-spacing:-0.01em; }
+  .v-ai-rec-h{ font-family:var(--v-sans); font-size:18px; font-weight:500; color:var(--v-white); margin:0 0 11px; line-height:1.25; letter-spacing:-0.01em; }
   .v-upside-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
-  .v-upside-label{ font-family:var(--v-mono); font-size:11px; font-weight:500; color:var(--v-text-faint); letter-spacing:.05em; margin-bottom:7px; text-transform:uppercase; }
-  .v-upside-value{ font-family:var(--v-mono); font-size:38px; font-weight:500; color:var(--v-pass); line-height:1; letter-spacing:-0.01em; }
+  .v-upside-label{ font-family:var(--v-mono); font-size:11px; font-weight:500; color:var(--v-text-faint); letter-spacing:.05em; margin-bottom:5px; text-transform:uppercase; }
+  .v-upside-value{ font-family:var(--v-mono); font-size:34px; font-weight:500; color:var(--v-pass); line-height:1; letter-spacing:-0.01em; }
   .v-conf-wrap{ display:flex; flex-direction:column; align-items:flex-end; }
-  .v-conf-ring{ position:relative; width:44px; height:44px; }
+  .v-conf-ring{ position:relative; width:40px; height:40px; }
   .v-conf-ring svg{ transform:rotate(-90deg); display:block; }
   .v-conf-ring-track{ fill:none; stroke:rgba(255,255,255,.16); stroke-width:5; }
   .v-conf-ring-progress{ fill:none; stroke:var(--v-aperture); stroke-width:5; stroke-linecap:butt; stroke-dasharray:163.4; stroke-dashoffset:163.4; transition:stroke-dashoffset .85s var(--v-motion); }
@@ -268,7 +268,7 @@
               <div class="v-conf-wrap">
                 <div class="v-upside-label">Confidence</div>
                 <div class="v-conf-ring">
-                  <svg viewBox="0 0 64 64" width="44" height="44">
+                  <svg viewBox="0 0 64 64" width="40" height="40">
                     <circle class="v-conf-ring-track" cx="32" cy="32" r="26"></circle>
                     <circle class="v-conf-ring-progress" cx="32" cy="32" r="26"></circle>
                   </svg>
