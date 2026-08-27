@@ -13,12 +13,12 @@ const MOTION = { enter: Easing.easeOutCubic, draw: Easing.easeInOutQuart };
 
 const TYPE = {
   key: "400 22px/1 var(--font-mono)",
-  label: "400 20px/1 var(--font-mono)",
-  id: "400 21px/1 var(--font-mono)",
-  row: "500 33px/1 var(--font-sans)",
+  label: "400 18px/1 var(--font-mono)",
+  id: "400 18px/1 var(--font-mono)",
+  row: "500 30px/1 var(--font-sans)",
   head: "500 45px/1.24 var(--font-sans)",
   figure: "400 100px/1 var(--font-mono)",
-  value: "400 31px/1 var(--font-mono)"
+  value: "400 26px/1 var(--font-mono)"
 };
 
 function palette(ground, glass) {
