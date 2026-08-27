@@ -21,7 +21,7 @@ a{color:#49C4F1}
 a:hover{color:#2FA6D4}
 [data-omelette-chrome]{display:none !important;}
 </style>
-<script>window.OM_SCENES = '[{"name":"Hold","dur":2,"desc":"The modelled optimum holds; every figure is settled."},{"name":"Down","dur":3,"desc":"The sweep drops to current pricing and revenue, margin and risk fall with it."},{"name":"Up","dur":3.5,"desc":"The sweep pushes past the optimum; margin rolls off and the risk screens flag."},{"name":"Settle","dur":3.5,"desc":"The sweep returns to the modelled optimum and the margin uplift lands."}]';</script>
+<script>window.OM_SCENES = "[{\"name\":\"Hold\",\"dur\":2,\"desc\":\"The modelled optimum holds at 41.6% margin.\"},{\"name\":\"Down\",\"dur\":2.8,\"desc\":\"The sweep drops to current pricing and margin falls with it.\"},{\"name\":\"Up\",\"dur\":2.8,\"desc\":\"The sweep pushes past the optimum; margin rolls off and outflow risk climbs.\"},{\"name\":\"Settle\",\"dur\":3,\"desc\":\"The sweep returns to the optimum and the uplift lands.\"}]";</script>
 <script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
 <script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ground": "ink",
@@ -30,7 +30,7 @@ a:hover{color:#2FA6D4}
   "motionEditor": false
 }/*EDITMODE-END*/;</script>
 </helmet>
-<x-import component-from-global-scope="OptimisePiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./optimise-scene.jsx" hint-size="100%,100%"></x-import>
+<x-import component-from-global-scope="OptimiseMobilePiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./mobile-scenes.jsx" hint-size="100%,100%"></x-import>
 </x-dc>
 </body>
 </html>

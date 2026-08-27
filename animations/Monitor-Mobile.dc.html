@@ -21,7 +21,7 @@ a{color:#49C4F1}
 a:hover{color:#2FA6D4}
 [data-omelette-chrome]{display:none !important;}
 </style>
-<script>window.OM_SCENES = '[{"name":"Current","dur":2,"desc":"The record holds at the current version, 14 August."},{"name":"Rewind","dur":3.5,"desc":"The playhead walks the audit history back to the first stamped version."},{"name":"Inspect","dur":2.5,"desc":"The panel holds on the earliest version and its evidence."},{"name":"Return","dur":3,"desc":"The playhead returns to the current version and the record settles."}]';</script>
+<script>window.OM_SCENES = "[{\"name\":\"Rest\",\"dur\":2,\"desc\":\"The lead story holds; the three closed sections sit below.\"},{\"name\":\"Scan\",\"dur\":2.4,\"desc\":\"A highlight passes down the three closed sections.\"},{\"name\":\"Advance\",\"dur\":2.6,\"desc\":\"The feed advances to the second story.\"},{\"name\":\"Back\",\"dur\":2.6,\"desc\":\"The feed returns to the lead story.\"}]";</script>
 <script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
 <script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ground": "ink",
@@ -30,7 +30,7 @@ a:hover{color:#2FA6D4}
   "motionEditor": false
 }/*EDITMODE-END*/;</script>
 </helmet>
-<x-import component-from-global-scope="DefendPiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./defend-scene.jsx" hint-size="100%,100%"></x-import>
+<x-import component-from-global-scope="MonitorMobilePiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./mobile-scenes.jsx" hint-size="100%,100%"></x-import>
 </x-dc>
 </body>
 </html>

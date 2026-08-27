@@ -21,7 +21,7 @@ a{color:#49C4F1}
 a:hover{color:#2FA6D4}
 [data-omelette-chrome]{display:none !important;}
 </style>
-<script>window.OM_SCENES = '[{"name":"Queue","dur":2,"desc":"Two governance steps are stamped and the third sits under review."},{"name":"Sign","dur":3,"desc":"Product governance and client disclosure clear in turn and the rail fills."},{"name":"Publish","dur":3,"desc":"The fee schedule goes live and the audit-ready stamp lands."},{"name":"Advance","dur":3.5,"desc":"The stamped record moves on and the next run arrives in the opening state."}]';</script>
+<script>window.OM_SCENES = "[{\"name\":\"Current\",\"dur\":2,\"desc\":\"The record holds at the current version.\"},{\"name\":\"Rewind\",\"dur\":3,\"desc\":\"The playhead walks the audit history back to the first stamped version.\"},{\"name\":\"Inspect\",\"dur\":2,\"desc\":\"The panel holds on the earliest version and its evidence.\"},{\"name\":\"Return\",\"dur\":2.8,\"desc\":\"The playhead returns to the current version.\"}]";</script>
 <script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
 <script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ground": "ink",
@@ -30,7 +30,7 @@ a:hover{color:#2FA6D4}
   "motionEditor": false
 }/*EDITMODE-END*/;</script>
 </helmet>
-<x-import component-from-global-scope="ImplementPiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./implement-scene.jsx" hint-size="100%,100%"></x-import>
+<x-import component-from-global-scope="DefendMobilePiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./mobile-scenes.jsx" hint-size="100%,100%"></x-import>
 </x-dc>
 </body>
 </html>
