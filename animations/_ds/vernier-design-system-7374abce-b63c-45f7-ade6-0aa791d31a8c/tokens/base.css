@@ -1,0 +1,6 @@
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{margin:0;background:var(--surface-paper);color:var(--text-body);font-family:var(--font-sans);font-size:var(--body-m);line-height:var(--body-leading);font-weight:400}
+*,*::before,*::after{box-sizing:border-box;border-radius:0}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+a:hover{color:var(--accent-hover)}
+::selection{background:var(--signal-tint-22);color:var(--ink)}

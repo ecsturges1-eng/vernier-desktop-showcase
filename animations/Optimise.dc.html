@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/vernier-design-system-7374abce-b63c-45f7-ade6-0aa791d31a8c/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-7374abce-b63c-45f7-ade6-0aa791d31a8c/tokens/colors.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-7374abce-b63c-45f7-ade6-0aa791d31a8c/tokens/typography.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-7374abce-b63c-45f7-ade6-0aa791d31a8c/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-7374abce-b63c-45f7-ade6-0aa791d31a8c/tokens/base.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-7374abce-b63c-45f7-ade6-0aa791d31a8c/styles.css">
+<script src="_ds/vernier-design-system-7374abce-b63c-45f7-ade6-0aa791d31a8c/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#06122A}
+a{color:#49C4F1}
+a:hover{color:#2FA6D4}
+[data-omelette-chrome]{display:none !important;}
+</style>
+<script>window.OM_SCENES = '[{"name":"Hold","dur":2,"desc":"The modelled optimum holds; every figure is settled."},{"name":"Down","dur":3,"desc":"The sweep drops to current pricing and revenue, margin and risk fall with it."},{"name":"Up","dur":3.5,"desc":"The sweep pushes past the optimum; margin rolls off and the risk screens flag."},{"name":"Settle","dur":3.5,"desc":"The sweep returns to the modelled optimum and the margin uplift lands."}]';</script>
+<script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
+<script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "ground": "ink",
+  "glass": 0.055,
+  "radius": 16,
+  "motionEditor": false
+}/*EDITMODE-END*/;</script>
+</helmet>
+<x-import component-from-global-scope="OptimisePiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./optimise-scene.jsx" hint-size="100%,100%"></x-import>
+</x-dc>
+</body>
+</html>

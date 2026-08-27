@@ -1,0 +1,21 @@
+/* 4px ladder. 12 columns · 28px gutters. */
+:root{
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:20px;
+  --space-5:28px;
+  --space-6:44px;
+  --space-7:56px;
+  --space-8:72px;
+
+  --grid-columns:12; /* @kind other */
+  --grid-gutter:28px;
+  --margin-deck:80px;      /* 1920×1080 slides */
+  --margin-document:56px;  /* documents */
+
+  /* Flat, always. No gradient, glow, shadow, rounded corner or decorative tint. */
+  --radius:0px;
+  --shadow:none;
+  --rule-width:1px;
+}

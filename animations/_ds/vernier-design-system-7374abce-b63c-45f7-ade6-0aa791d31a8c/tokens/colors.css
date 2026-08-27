@@ -1,0 +1,70 @@
+/* Two neutrals · two accents · two grounds.
+   One accent per ground: Signal on Paper, Aperture on Ink. Never both on one surface. */
+:root{
+  /* Base palette */
+  --ink:#06122A;
+  --ink-raised:#0E1E3A;
+  --slate:#2E3A4D;
+  --mist:#A5B2C6;
+  --paper:#EAEBEA;
+  --sheet:#F4F5F4;
+  --recess:#DCDEDD;
+  --signal:#24409B;
+  --signal-deep:#1B3179;
+  --aperture:#49C4F1;
+  --aperture-deep:#2FA6D4;
+
+  /* Interaction ladder — Signal on Paper */
+  --signal-tint-10:#E9ECF5;
+  --signal-tint-22:#CFD5E9;
+
+  /* Surface ladder — build every UI from these five */
+  --surface-sheet:#F4F5F4;   /* inputs, wells */
+  --surface-paper:#EAEBEA;   /* page ground */
+  --surface-recess:#DCDEDD;  /* zebra, rails */
+  --surface-ink-raised:#0E1E3A; /* dark card */
+  --surface-ink:#06122A;     /* dark ground */
+  --surface-card:#EAEBEA;
+
+  /* Semantic — Paper ground */
+  --text-body:#06122A;
+  --text-secondary:#2E3A4D;
+  --text-label:#2E3A4D;
+  --accent:#24409B;
+  --accent-hover:#1B3179;
+  --accent-pressed:#1B3179;
+  --on-accent:#EAEBEA;
+
+  /* Semantic — Ink ground */
+  --text-body-ink:#EAEBEA;
+  --text-secondary-ink:#A5B2C6;
+  --text-label-ink:#A5B2C6;
+  --accent-ink:#49C4F1;
+  --accent-ink-hover:#2FA6D4;
+  --accent-ink-pressed:#2FA6D4;
+  --on-accent-ink:#06122A;
+
+  /* Rules — 1px hairlines at 10–25% Ink; section dividers only */
+  --rule-10:rgba(6,18,42,.10);
+  --rule-15:rgba(6,18,42,.15);
+  --rule-25:rgba(6,18,42,.25);
+  --rule-ink-10:rgba(234,235,234,.10);
+  --rule-ink-20:rgba(234,235,234,.20);
+  --hairline:1px solid var(--rule-15); /* @kind other */
+  --hairline-ink:1px solid var(--rule-ink-20); /* @kind other */
+}
+
+/* Dark ground scope: opt any subtree onto Ink with class="ink". */
+.ink{
+  --surface-card:#0E1E3A;
+  --text-body:#EAEBEA;
+  --text-secondary:#A5B2C6;
+  --text-label:#A5B2C6;
+  --accent:#49C4F1;
+  --accent-hover:#2FA6D4;
+  --accent-pressed:#2FA6D4;
+  --on-accent:#06122A;
+  --hairline:1px solid rgba(234,235,234,.20); /* @kind other */
+  background:#06122A;
+  color:#EAEBEA;
+}
