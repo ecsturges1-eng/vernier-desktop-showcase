@@ -25,7 +25,7 @@ function palette(ground, glass) {
   const ink = ground === "ink";
   return {
     ink,
-    bg: ink ? "#06122A" : "#EAEBEA",
+    bg: ink ? "#131E35" : "#EAEBEA",
     text: ink ? "#EAEBEA" : "#06122A",
     dim: ink ? "#A5B2C6" : "#2E3A4D",
     accent: ink ? "#49C4F1" : "#24409B",
