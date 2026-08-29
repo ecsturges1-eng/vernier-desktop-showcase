@@ -6,7 +6,7 @@ const { useTweaks, TweaksPanel, TweakSection, TweakToggle, TweakSlider, TweakRad
 const W = 1080, H = 1400;
 const CARD = { left: 28, top: 84, w: 1024 };
 const PAD = 40, RAIL = 68;               // left gutter carries the collecting trunk
-const STAGE_H = 1050;
+const SEC_T = 20, ARROW_RUN = 40, SEC_B = 28;
 const INNER = CARD.w - PAD * 2;
 const BODY_W = INNER - RAIL;
 const SECTIONS_N = 5;
@@ -136,7 +136,10 @@ const CURVE = (() => {
   return "M" + p.join(" L");
 })();
 
-const GRP_H = 44, MROW_H = 92, GRP_GAP = 18, COLH_H = 64;
+const GRP_H = 44, MROW_H = 88, GRP_GAP = 18, COLH_H = 64;
+const TRUNK_END = COLH_H + GRP_H + MROW_H * 4 + GRP_GAP + GRP_H + MROW_H * 5;
+const ARROW_END = TRUNK_END + ARROW_RUN;
+const STAGE_H = SEC_T + ARROW_END + SEC_B;
 const rowTop = (i) => i < 4
   ? COLH_H + GRP_H + MROW_H * i
   : COLH_H + GRP_H + MROW_H * 4 + GRP_GAP + GRP_H + MROW_H * (i - 4);
@@ -176,7 +179,7 @@ function Combined({ tw }) {
   const collect = clamp(
     animate({ from: 0, to: 1, start: CUES.Collect + 0.2, end: CUES.Collect + 2.6, ease: MOTION.draw })(T) -
     animate({ from: 0, to: 1, start: CUES.Settle + 1.4, end: CUES.Settle + 2.2, ease: MOTION.draw })(T), 0, 1);
-  const trunkEnd = rowTop(ROWS.length - 1) + MROW_H;
+  const trunkEnd = TRUNK_END;
   const trunkY = collect * trunkEnd;
   const tapped = (i) => clamp((trunkY - (rowTop(i) + MROW_H / 2)) / 40, 0, 1);
 
@@ -205,7 +208,7 @@ function Combined({ tw }) {
     <div style={{ position: "absolute", inset: 0, background: C.bg, overflow: "hidden", fontFamily: "var(--font-sans)" }}>
       <div style={{
         position: "absolute", left: CARD.left, top: CARD.top, width: CARD.w,
-        background: C.panel, border: `1px solid ${C.rule}`, borderRadius: tw.radius,
+        background: C.panel, borderRadius: tw.radius,
         transform: `translateY(${camY}px) scale(${camScale})`, transformOrigin: "50% 0%",
         display: "flex", flexDirection: "column", overflow: "hidden"
       }}>
@@ -216,7 +219,7 @@ function Combined({ tw }) {
           <span style={{ font: TYPE.label, letterSpacing: ".14em", color: C.dim, fontVariantNumeric: "tabular-nums" }}>VR-2291 · 09:41 UTC</span>
         </div>
 
-        <div style={{ padding: `0 ${PAD}px 30px`, flex: "0 0 auto" }}>
+        <div style={{ padding: `0 ${PAD}px 26px`, display: "flex", alignItems: "center", gap: 24, flex: "0 0 auto" }}>
           <span style={{
             display: "inline-flex", alignItems: "center", gap: 13, border: `1px solid ${C.rule}`,
             padding: "14px 18px", font: "500 17px/1 var(--font-mono)", letterSpacing: ".12em", color: C.text
@@ -226,6 +229,11 @@ function Combined({ tw }) {
             </span>
             NEW PRODUCT
           </span>
+          <span style={{ flex: 1, display: "flex", gap: 8 }}>
+            {Array.from({ length: SECTIONS_N }).map((_, i) => (
+              <span key={i} style={{ flex: 1, height: 4, background: step >= i - 0.5 ? C.accent : C.ruleSoft }} />
+            ))}
+          </span>
         </div>
 
         {/* ── the stage: one section visible, stepping downward ── */}
@@ -233,7 +241,7 @@ function Combined({ tw }) {
           <div style={{ transform: `translateY(${-step * STAGE_H}px)` }}>
 
             {/* 01 · monitor */}
-            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `28px ${PAD}px 0`, position: "relative" }}>
+            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `${SEC_T}px ${PAD}px 0`, position: "relative", display: "flex", flexDirection: "column" }}>
               <div style={{ marginLeft: RAIL }}>
                 <SectionHead C={C} n="01" label="MONITOR" right="9 SECTIONS" />
                 {GROUPS.map((g, gi) => {
@@ -266,8 +274,8 @@ function Combined({ tw }) {
               </div>
 
               {/* collecting trunk, drawn down the left gutter */}
-              <svg width={RAIL} height={trunkEnd + 60} viewBox={`0 0 ${RAIL} ${trunkEnd + 60}`}
-                   style={{ position: "absolute", left: PAD, top: 28, overflow: "visible" }}>
+              <svg width={RAIL} height={ARROW_END} viewBox={`0 0 ${RAIL} ${ARROW_END}`}
+                   style={{ position: "absolute", left: PAD, top: SEC_T, overflow: "hidden" }}>
                 <line x1="18" y1="0" x2="18" y2={trunkEnd} stroke={C.ruleSoft} strokeWidth="1" />
                 {ROWS.map((_, i) => (
                   <line key={i} x1="18" y1={rowTop(i) + MROW_H / 2} x2={RAIL} y2={rowTop(i) + MROW_H / 2}
@@ -276,14 +284,15 @@ function Combined({ tw }) {
                 ))}
                 <line x1="18" y1="0" x2="18" y2={trunkY} stroke={C.accent} strokeWidth="2" />
                 <rect x="12" y={trunkY - 6} width="12" height="12" fill={C.accent} opacity={collect > 0.01 ? 1 : 0} />
-                <path d={`M18 ${trunkEnd + 12} V${trunkEnd + 44} M10 ${trunkEnd + 36} L18 ${trunkEnd + 44} L26 ${trunkEnd + 36}`}
+                <path d={`M18 ${trunkEnd + 10} V${ARROW_END - 2} M10 ${ARROW_END - 10} L18 ${ARROW_END - 2} L26 ${ARROW_END - 10}`}
                       fill="none" stroke={C.accent} strokeWidth="2" opacity={collect > 0.98 ? 1 : 0.15} />
               </svg>
             </div>
 
             {/* 02 · portfolio scan */}
-            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `28px ${PAD}px 0` }}>
+            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `${SEC_T}px ${PAD}px ${SEC_B}px`, display: "flex", flexDirection: "column" }}>
               <SectionHead C={C} n="02" label="PORTFOLIO SCAN" right={`${scanned} / ${FUNDS.length}`} />
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
               <div style={{
                 display: "flex", alignItems: "center", gap: 20, height: 48, boxSizing: "border-box",
                 borderBottom: `1px solid ${C.ruleSoft}`, font: "400 16px/1 var(--font-mono)", letterSpacing: ".14em", color: C.dim
@@ -316,12 +325,13 @@ function Combined({ tw }) {
                   </div>
                 );
               })}
+              </div>
             </div>
 
             {/* 03 · optimiser */}
-            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `28px ${PAD}px 0`, display: "flex", flexDirection: "column" }}>
+            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `${SEC_T}px ${PAD}px ${SEC_B}px`, display: "flex", flexDirection: "column" }}>
               <SectionHead C={C} n="03" label="OPTIMISE" right={`SWEEP ${f.toFixed(0)}BPS`} />
-              <div style={{ paddingTop: 44, display: "flex", flexDirection: "column", gap: 40 }}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 40 }}>
                 <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 24 }}>
                   <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                     <span style={{ font: TYPE.label, letterSpacing: ".14em", color: C.dim }}>OPERATING MARGIN</span>
@@ -357,9 +367,9 @@ function Combined({ tw }) {
             </div>
 
             {/* 04 · proposal */}
-            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `28px ${PAD}px 0` }}>
+            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `${SEC_T}px ${PAD}px ${SEC_B}px`, display: "flex", flexDirection: "column" }}>
               <SectionHead C={C} n="04" label="PROPOSAL" pill={<Pill C={C} tone="accent">READY TO FILE</Pill>} />
-              <div style={{ paddingTop: 44, display: "flex", flexDirection: "column", gap: 44 }}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 44 }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                   <span style={{ font: TYPE.label, letterSpacing: ".14em", color: C.dim }}>NET REVENUE UPLIFT</span>
                   <span style={{ font: "400 78px/1 var(--font-mono)", letterSpacing: "-0.02em", color: C.text, fontVariantNumeric: "tabular-nums" }}>
@@ -397,9 +407,9 @@ function Combined({ tw }) {
             </div>
 
             {/* 05 · confirmation */}
-            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `28px ${PAD}px 0` }}>
+            <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `${SEC_T}px ${PAD}px ${SEC_B}px`, display: "flex", flexDirection: "column" }}>
               <SectionHead C={C} n="05" label="IMPLEMENTATION" right="VR-2291" />
-              <div style={{ height: STAGE_H - COLH_H - 56, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 44 }}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 44 }}>
                 <svg width="120" height="120" viewBox="0 0 120 120" style={{ display: "block", transform: `scale(${tickPop})`, transformOrigin: "50% 50%" }}>
                   <circle cx="60" cy="60" r="48" fill="none" stroke={C.green} strokeWidth="2.5"
                           pathLength="1" strokeDasharray="1" strokeDashoffset={1 - ringDraw}
@@ -413,13 +423,6 @@ function Combined({ tw }) {
                 }}>Ready for implementation</span>
               </div>
             </div>
-          </div>
-
-          {/* progress rail — one rung per section */}
-          <div style={{ position: "absolute", left: PAD, right: PAD, bottom: 0, display: "flex", gap: 8 }}>
-            {Array.from({ length: SECTIONS_N }).map((_, i) => (
-              <div key={i} style={{ flex: 1, height: 4, background: step >= i - 0.5 ? C.accent : C.ruleSoft }} />
-            ))}
           </div>
         </div>
       </div>
