@@ -4,16 +4,27 @@ const { useTweaks, TweaksPanel, TweakSection, TweakToggle, TweakSlider, TweakRad
 // Centrepiece — the four monitored sections feed one trunk on the right,
 // the trunk scans the portfolio, and the scan hands off to the optimiser.
 const W = 1440, H = 900;
-const CARD = { left: 96, top: 72, w: 1440, h: 880 };
+// Bleeds past all four crop edges; BLEED absorbs the camera drift so no ground
+// can ever show. Internal padding adds it back so content sits where intended.
+const BLEED = 32;
+const CARD = { left: -BLEED, top: -BLEED, w: 1440 + BLEED * 2, h: 900 + BLEED * 2 };
 const PADL = 56;
 const BODY_T = 116;                       // body origin inside the card
 const COL_W = 544, GUT_X = 600, GUT_W = 160, PANE_X = 760, PANE_W = 544;
-const HDR_H = 44, GRP_H = 34, ROW_H = 50, GRP_GAP = 14;
+const HDR_H = 44, GRP_H = 34, GRP_GAP = 14;
+// Everything below is derived from the canvas so both columns reach the bottom
+// crop: no hard pane height, no hard row height.
+const BODY_TOP = 116 + 32;                       // BODY_T + BLEED
+const BODY_H = 900 + 32 - BODY_TOP;              // to the bleed edge
+const PANE_H = BODY_H;
+const ROW_H = Math.floor((BODY_H - HDR_H - GRP_H * 2 - GRP_GAP) / 9);
+const SCAN_ROW_H = Math.floor((PANE_H - HDR_H - 34) / 6);
+const OUT_ROW_H = Math.floor((PANE_H - HDR_H - 250) / 5);   // proposal table rows
 // Row 0-3 sit under the External group header, 4-8 under Internal.
 const rowY = (i) => i < 4
   ? HDR_H + GRP_H + ROW_H * i + ROW_H / 2
   : HDR_H + GRP_H + ROW_H * 4 + GRP_GAP + GRP_H + ROW_H * (i - 4) + ROW_H / 2;
-const INLET = 296;
+const INLET = HDR_H + GRP_H + ROW_H * 4 + Math.round(GRP_GAP / 2);
 
 const MOTION = { enter: Easing.easeOutCubic, draw: Easing.easeInOutQuart };
 
@@ -125,12 +136,12 @@ const GROUPS = [
 const SECTIONS = GROUPS.flatMap((g) => g.rows);
 
 const FUNDS = [
-  { id: "VR-1104", name: "Global equity", aum: "£2.1bn", fee: "0.64%", flag: null },
-  { id: "VR-1876", name: "Sterling credit", aum: "£0.9bn", fee: "0.41%", flag: null },
-  { id: "VR-2291", name: "Euro smaller cos.", aum: "£6.3bn", fee: "0.72%", flag: "amber" },
-  { id: "VR-2410", name: "Multi-asset", aum: "£3.4bn", fee: "0.58%", flag: null },
-  { id: "VR-2688", name: "EM hard-ccy debt", aum: "£1.2bn", fee: "0.69%", flag: null },
-  { id: "VR-3050", name: "Index tracker", aum: "£8.7bn", fee: "0.11%", flag: null }
+  { id: "VR-1104", name: "Global Equity Income", aum: "£2.1bn", fee: "0.64%", flag: null },
+  { id: "VR-1876", name: "Sterling Corporate Bond", aum: "£0.9bn", fee: "0.41%", flag: null },
+  { id: "VR-2291", name: "European Smaller Companies", aum: "£6.3bn", fee: "0.72%", flag: "amber" },
+  { id: "VR-2410", name: "Diversified Growth", aum: "£3.4bn", fee: "0.58%", flag: null },
+  { id: "VR-2688", name: "Emerging Market Debt", aum: "£1.2bn", fee: "0.69%", flag: null },
+  { id: "VR-3050", name: "Global Index Tracker", aum: "£8.7bn", fee: "0.11%", flag: null }
 ];
 
 // Elasticity model — the optimiser's own numbers.
@@ -139,7 +150,7 @@ const ret = (f) => 1 / (1 + Math.exp((f - 93) / 6));
 const rev = (f) => AUM * (f / 10000) * ret(f);
 const margin = (f) => (rev(f) - COST) / rev(f);
 const M0 = margin(CURRENT);
-const CW = PANE_W - 48, CH = 186, F0 = 60, F1 = 92;
+const CW = PANE_W - 48, CH = 300, F0 = 60, F1 = 92;
 const X = (f) => ((f - F0) / (F1 - F0)) * CW;
 const Y = (r) => CH - ((r - 30e6) / 17e6) * CH;
 const CURVE = (() => {
@@ -206,11 +217,11 @@ function Combined({ tw }) {
     <div style={{ position: "absolute", inset: 0, background: C.bg, overflow: "hidden", fontFamily: "var(--font-sans)" }}>
       <div style={{
         position: "absolute", left: CARD.left, top: CARD.top, width: CARD.w, height: CARD.h,
-        background: C.panel, border: `1px solid ${C.rule}`, borderRadius: tw.radius,
+        background: C.panel,
         transform: `translate(${camY * 0.5}px, ${camY}px) scale(${camScale})`, transformOrigin: "0% 0%",
         overflow: "hidden"
       }}>
-        <div style={{ padding: `38px 150px 0 ${PADL}px`, display: "flex", alignItems: "center", gap: 18 }}>
+        <div style={{ padding: `${38 + BLEED}px ${150 + BLEED}px 0 ${PADL + BLEED}px`, display: "flex", alignItems: "center", gap: 18 }}>
           <span style={{ width: 9, height: 9, background: C.accent, flex: "none" }} />
           <span style={{ font: TYPE.key, letterSpacing: ".14em", color: C.text }}>PRICING INTELLIGENCE</span>
           <span style={{
@@ -228,7 +239,7 @@ function Combined({ tw }) {
           </span>
         </div>
 
-        <div style={{ position: "absolute", left: 0, top: BODY_T, right: 0, bottom: 0 }}>
+        <div style={{ position: "absolute", left: BLEED, top: BODY_T + BLEED, right: 0, bottom: 0 }}>
           {/* ── monitored sections ── */}
           <div style={{ position: "absolute", left: PADL, top: 0, width: COL_W }}>
             <div style={{ display: "flex", alignItems: "center", gap: 18, height: HDR_H, boxSizing: "border-box", borderBottom: `1px solid ${C.ruleSoft}` }}>
@@ -277,7 +288,7 @@ function Combined({ tw }) {
           </div>
 
           {/* ── routing ── */}
-          <svg width={GUT_W} height="556" viewBox={`0 0 ${GUT_W} 556`} style={{ position: "absolute", left: GUT_X, top: HDR_H, overflow: "visible" }}>
+          <svg width={GUT_W} height={PANE_H} viewBox={`0 0 ${GUT_W} ${PANE_H}`} style={{ position: "absolute", left: GUT_X, top: HDR_H, overflow: "visible" }}>
             {TRACES.map((d, i) => (
               <g key={i}>
                 <path d={d} fill="none" stroke={C.ruleSoft} strokeWidth="1" />
@@ -290,7 +301,7 @@ function Combined({ tw }) {
 
           {/* ── right pane ── */}
           <div style={{
-            position: "absolute", left: PANE_X, top: 0, width: PANE_W, height: 556,
+            position: "absolute", left: PANE_X, top: 0, width: PANE_W, height: PANE_H,
             border: `1px solid ${C.rule}`, background: C.well, overflow: "hidden"
           }}>
           <div style={{ display: "flex", width: PANE_W * PAGES, height: "100%", transform: `translateX(${-pagePos * PANE_W}px)` }}>
@@ -306,20 +317,20 @@ function Combined({ tw }) {
 
             <div style={{ position: "absolute", left: 0, top: HDR_H, width: "100%" }}>
               <div style={{
-                display: "flex", alignItems: "center", gap: 14, height: 34, boxSizing: "border-box", padding: "0 20px",
+                display: "flex", alignItems: "center", gap: 12, height: 34, boxSizing: "border-box", padding: "0 16px",
                 borderBottom: `1px solid ${C.ruleSoft}`, font: "400 12px/1 var(--font-mono)", letterSpacing: ".14em", color: C.dim
               }}>
                 <span style={{ width: 9, flex: "none" }} />
-                <span style={{ width: 78, flex: "none" }}>FUND</span>
+                <span style={{ width: 72, flex: "none" }}>FUND</span>
                 <span style={{ flex: 1, minWidth: 0 }}>RANGE</span>
-                <span style={{ width: 78, flex: "none", textAlign: "right" }}>OCF</span>
-                <span style={{ width: 86, flex: "none" }} />
+                <span style={{ width: 70, flex: "none", textAlign: "right" }}>OCF</span>
+                <span style={{ width: 64, flex: "none" }} />
               </div>
               {FUNDS.map((fd, i) => {
                 const seen = i < scanned, live = i === active && scanned < FUNDS.length;
                 return (
                   <div key={fd.id} style={{
-                    display: "flex", alignItems: "center", gap: 14, height: 75, boxSizing: "border-box", padding: "0 20px",
+                    display: "flex", alignItems: "center", gap: 12, height: SCAN_ROW_H, boxSizing: "border-box", padding: "0 16px",
                     borderBottom: `1px solid ${C.ruleSoft}`,
                     background: live ? C.sel : "transparent",
                     opacity: seen || live ? 1 : 0.4
@@ -329,11 +340,11 @@ function Combined({ tw }) {
                       background: seen && fd.flag ? C.amber : seen ? C.green : live ? C.accent : "transparent",
                       border: seen || live ? "none" : `1.2px solid ${C.muted}`
                     }} />
-                    <span style={{ width: 78, flex: "none", font: TYPE.id, letterSpacing: ".08em", color: C.dim, fontVariantNumeric: "tabular-nums" }}>{fd.id}</span>
+                    <span style={{ width: 72, flex: "none", font: TYPE.id, letterSpacing: ".08em", color: C.dim, fontVariantNumeric: "tabular-nums" }}>{fd.id}</span>
                     <span style={{ flex: 1, minWidth: 0, font: "400 17px/1 var(--font-sans)", color: C.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{fd.name}</span>
-                    <span style={{ width: 78, flex: "none", font: TYPE.value, textAlign: "right", color: C.text, fontVariantNumeric: "tabular-nums" }}>{fd.fee}</span>
-                    <span style={{ width: 86, flex: "none", display: "flex", justifyContent: "flex-end" }}>
-                      {seen && fd.flag ? <Pill C={C} tone="amber">FLAGGED</Pill> : null}
+                    <span style={{ width: 70, flex: "none", font: TYPE.value, textAlign: "right", color: C.text, fontVariantNumeric: "tabular-nums" }}>{fd.fee}</span>
+                    <span style={{ width: 64, flex: "none", display: "flex", justifyContent: "flex-end" }}>
+                      {seen && fd.flag ? <Pill C={C} tone="amber">FLAG</Pill> : null}
                     </span>
                   </div>
                 );
@@ -350,7 +361,7 @@ function Combined({ tw }) {
               <span style={{ font: TYPE.label, letterSpacing: ".14em", color: C.dim, fontVariantNumeric: "tabular-nums" }}>SWEEP {f.toFixed(0)}BPS</span>
             </div>
 
-            <div style={{ position: "absolute", left: 0, top: HDR_H, width: "100%", padding: "26px 20px", boxSizing: "border-box", display: "flex", flexDirection: "column", gap: 20 }}>
+            <div style={{ position: "absolute", left: 0, top: HDR_H, right: 0, bottom: 0, padding: "26px 20px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center", gap: 26 }}>
               <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <span style={{ font: TYPE.label, letterSpacing: ".14em", color: C.dim }}>OPERATING MARGIN</span>
@@ -389,10 +400,10 @@ function Combined({ tw }) {
               <span style={{ flex: 1 }} />
               <Pill C={C} tone="accent">READY TO FILE</Pill>
             </div>
-            <div style={{ padding: "22px 20px", display: "flex", flexDirection: "column", gap: 20 }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ position: "absolute", left: 0, top: HDR_H, right: 0, bottom: 0, padding: "26px 20px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center", gap: 26 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <span style={{ font: TYPE.label, letterSpacing: ".14em", color: C.dim }}>NET REVENUE UPLIFT</span>
-                <span style={{ font: "400 44px/1 var(--font-mono)", letterSpacing: "-0.02em", color: C.text, fontVariantNumeric: "tabular-nums" }}>
+                <span style={{ font: "400 52px/1 var(--font-mono)", letterSpacing: "-0.02em", color: C.text, fontVariantNumeric: "tabular-nums" }}>
                   +£{((rev(OPTIMUM) - rev(CURRENT)) / 1e6).toFixed(2)}m
                 </span>
                 <span style={{ font: "400 15px/1 var(--font-mono)", letterSpacing: ".08em", color: C.dim, fontVariantNumeric: "tabular-nums" }}>
@@ -413,7 +424,7 @@ function Combined({ tw }) {
                   ["CL1", "Competition law scan", "41 funds", "PASS", "green"],
                   ["RF1", "Regional filings", "3 / 3", "CLEARED", "green"]
                 ].map(([id, label, value, chip, tone2]) => (
-                  <div key={id} style={{ display: "flex", alignItems: "center", height: 54, boxSizing: "border-box", borderBottom: `1px solid ${C.ruleSoft}` }}>
+                  <div key={id} style={{ display: "flex", alignItems: "center", height: OUT_ROW_H, boxSizing: "border-box", borderBottom: `1px solid ${C.ruleSoft}` }}>
                     <span style={{ width: 44, flex: "none", font: "400 14px/1 var(--font-mono)", letterSpacing: ".08em", color: C.dim, fontVariantNumeric: "tabular-nums" }}>{id}</span>
                     <span style={{ flex: 1, minWidth: 0, font: "400 17px/1 var(--font-sans)", color: C.text, whiteSpace: "nowrap" }}>{label}</span>
                     <span style={{ width: 108, flex: "none", font: "400 18px/1 var(--font-mono)", textAlign: "right", color: C.text, fontVariantNumeric: "tabular-nums" }}>{value}</span>
@@ -453,7 +464,7 @@ function Combined({ tw }) {
           </div>
 
           {/* scroll rail */}
-          <div style={{ position: "absolute", left: 20, right: 20, bottom: 12, height: 3, background: C.ruleSoft }}>
+          <div style={{ position: "absolute", left: 20, right: 20, bottom: 44, height: 3, background: C.ruleSoft }}>
             <div style={{ position: "absolute", top: 0, left: `${(pagePos / PAGES) * 100}%`, width: `${100 / PAGES}%`, height: 3, background: C.muted }} />
           </div>
           </div>

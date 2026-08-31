@@ -4,8 +4,9 @@ const { useTweaks, TweaksPanel, TweakSection, TweakToggle, TweakSlider, TweakRad
 // Mobile centrepiece — the workflow runs top to bottom, one section on screen
 // at a time: monitor → portfolio scan → optimiser → proposal → confirmation.
 const W = 1080, H = 1400;
-const CARD = { left: 28, top: 84, w: 1024 };
-const PAD = 40, RAIL = 68;               // left gutter carries the collecting trunk
+const BLEED = 32;
+const CARD = { left: -BLEED, top: -BLEED, w: 1080 + BLEED * 2 };
+const PAD = 56, RAIL = 68;               // left gutter carries the collecting trunk
 const SEC_T = 20, ARROW_RUN = 40, SEC_B = 28;
 const INNER = CARD.w - PAD * 2;
 const BODY_W = INNER - RAIL;
@@ -112,12 +113,12 @@ const GROUPS = [
 const ROWS = GROUPS.flatMap((g) => g.rows);
 
 const FUNDS = [
-  { id: "VR-1104", name: "Global equity", fee: "0.64%", flag: null },
-  { id: "VR-1876", name: "Sterling credit", fee: "0.41%", flag: null },
-  { id: "VR-2291", name: "Euro smaller cos.", fee: "0.72%", flag: "amber" },
-  { id: "VR-2410", name: "Multi-asset", fee: "0.58%", flag: null },
-  { id: "VR-2688", name: "EM hard-ccy debt", fee: "0.69%", flag: null },
-  { id: "VR-3050", name: "Index tracker", fee: "0.11%", flag: null }
+  { id: "VR-1104", name: "Global Equity Income", fee: "0.64%", flag: null },
+  { id: "VR-1876", name: "Sterling Corporate Bond", fee: "0.41%", flag: null },
+  { id: "VR-2291", name: "European Smaller Companies", fee: "0.72%", flag: "amber" },
+  { id: "VR-2410", name: "Diversified Growth", fee: "0.58%", flag: null },
+  { id: "VR-2688", name: "Emerging Market Debt", fee: "0.69%", flag: null },
+  { id: "VR-3050", name: "Global Index Tracker", fee: "0.11%", flag: null }
 ];
 
 // Retention decays logistically with price, so net revenue peaks at 78bps.
@@ -137,6 +138,7 @@ const CURVE = (() => {
 })();
 
 const GRP_H = 44, MROW_H = 88, GRP_GAP = 18, COLH_H = 64;
+const TRUNK_START = COLH_H + GRP_H;
 const TRUNK_END = COLH_H + GRP_H + MROW_H * 4 + GRP_GAP + GRP_H + MROW_H * 5;
 const ARROW_END = TRUNK_END + ARROW_RUN;
 const STAGE_H = SEC_T + ARROW_END + SEC_B;
@@ -180,7 +182,7 @@ function Combined({ tw }) {
     animate({ from: 0, to: 1, start: CUES.Collect + 0.2, end: CUES.Collect + 2.6, ease: MOTION.draw })(T) -
     animate({ from: 0, to: 1, start: CUES.Settle + 1.4, end: CUES.Settle + 2.2, ease: MOTION.draw })(T), 0, 1);
   const trunkEnd = TRUNK_END;
-  const trunkY = collect * trunkEnd;
+  const trunkY = TRUNK_START + collect * (trunkEnd - TRUNK_START);
   const tapped = (i) => clamp((trunkY - (rowTop(i) + MROW_H / 2)) / 40, 0, 1);
 
   const scan = clamp(track([[0, 0], [CUES.Scan + 1.6, 0], [CUES.Scan + 4.0, FUNDS.length],
@@ -207,19 +209,19 @@ function Combined({ tw }) {
   return (
     <div style={{ position: "absolute", inset: 0, background: C.bg, overflow: "hidden", fontFamily: "var(--font-sans)" }}>
       <div style={{
-        position: "absolute", left: CARD.left, top: CARD.top, width: CARD.w,
-        background: C.panel, borderRadius: tw.radius,
+        position: "absolute", left: CARD.left, top: CARD.top, width: CARD.w, minHeight: H + BLEED * 2,
+        background: C.panel,
         transform: `translateY(${camY}px) scale(${camScale})`, transformOrigin: "50% 0%",
         display: "flex", flexDirection: "column", overflow: "hidden"
       }}>
-        <div style={{ padding: `36px ${PAD}px 30px`, display: "flex", alignItems: "center", gap: 18, flex: "0 0 auto" }}>
+        <div style={{ padding: `${36 + BLEED}px ${PAD + BLEED}px 30px ${PAD + BLEED}px`, display: "flex", alignItems: "center", gap: 18, flex: "0 0 auto" }}>
           <span style={{ width: 11, height: 11, background: C.accent, flex: "none" }} />
           <span style={{ font: TYPE.key, letterSpacing: ".14em", color: C.text }}>PRICING INTELLIGENCE</span>
           <span style={{ flex: 1 }} />
           <span style={{ font: TYPE.label, letterSpacing: ".14em", color: C.dim, fontVariantNumeric: "tabular-nums" }}>VR-2291 · 09:41 UTC</span>
         </div>
 
-        <div style={{ padding: `0 ${PAD}px 26px`, display: "flex", alignItems: "center", gap: 24, flex: "0 0 auto" }}>
+        <div style={{ padding: `0 ${PAD + BLEED}px 26px ${PAD + BLEED}px`, display: "flex", alignItems: "center", gap: 24, flex: "0 0 auto" }}>
           <span style={{
             display: "inline-flex", alignItems: "center", gap: 13, border: `1px solid ${C.rule}`,
             padding: "14px 18px", font: "500 17px/1 var(--font-mono)", letterSpacing: ".12em", color: C.text
@@ -237,13 +239,13 @@ function Combined({ tw }) {
         </div>
 
         {/* ── the stage: one section visible, stepping downward ── */}
-        <div style={{ height: STAGE_H, overflow: "hidden", position: "relative", flex: "0 0 auto", borderTop: `1px solid ${C.ruleSoft}` }}>
+        <div style={{ height: STAGE_H, margin: `0 ${BLEED}px 0 ${BLEED}px`, overflow: "hidden", position: "relative", flex: "0 0 auto", borderTop: `1px solid ${C.ruleSoft}` }}>
           <div style={{ transform: `translateY(${-step * STAGE_H}px)` }}>
 
             {/* 01 · monitor */}
             <div style={{ height: STAGE_H, boxSizing: "border-box", padding: `${SEC_T}px ${PAD}px 0`, position: "relative", display: "flex", flexDirection: "column" }}>
+              <SectionHead C={C} n="01" label="MONITOR" right="9 SECTIONS" />
               <div style={{ marginLeft: RAIL }}>
-                <SectionHead C={C} n="01" label="MONITOR" right="9 SECTIONS" />
                 {GROUPS.map((g, gi) => {
                   const base = gi === 0 ? 0 : GROUPS[0].rows.length;
                   return (
@@ -276,13 +278,13 @@ function Combined({ tw }) {
               {/* collecting trunk, drawn down the left gutter */}
               <svg width={RAIL} height={ARROW_END} viewBox={`0 0 ${RAIL} ${ARROW_END}`}
                    style={{ position: "absolute", left: PAD, top: SEC_T, overflow: "hidden" }}>
-                <line x1="18" y1="0" x2="18" y2={trunkEnd} stroke={C.ruleSoft} strokeWidth="1" />
+                <line x1="18" y1={TRUNK_START} x2="18" y2={trunkEnd} stroke={C.ruleSoft} strokeWidth="1" />
                 {ROWS.map((_, i) => (
                   <line key={i} x1="18" y1={rowTop(i) + MROW_H / 2} x2={RAIL} y2={rowTop(i) + MROW_H / 2}
                         stroke={tapped(i) > 0.02 ? C.accent : C.ruleSoft} strokeWidth={tapped(i) > 0.02 ? 1.6 : 1}
                         opacity={tapped(i) > 0.02 ? tapped(i) : 1} />
                 ))}
-                <line x1="18" y1="0" x2="18" y2={trunkY} stroke={C.accent} strokeWidth="2" />
+                <line x1="18" y1={TRUNK_START} x2="18" y2={trunkY} stroke={C.accent} strokeWidth="2" />
                 <rect x="12" y={trunkY - 6} width="12" height="12" fill={C.accent} opacity={collect > 0.01 ? 1 : 0} />
                 <path d={`M18 ${trunkEnd + 10} V${ARROW_END - 2} M10 ${ARROW_END - 10} L18 ${ARROW_END - 2} L26 ${ARROW_END - 10}`}
                       fill="none" stroke={C.accent} strokeWidth="2" opacity={collect > 0.98 ? 1 : 0.15} />
@@ -320,7 +322,7 @@ function Combined({ tw }) {
                     <span style={{ flex: 1, minWidth: 0, font: TYPE.small, color: C.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{fd.name}</span>
                     <span style={{ width: 116, flex: "none", font: TYPE.value, textAlign: "right", color: C.text, fontVariantNumeric: "tabular-nums" }}>{fd.fee}</span>
                     <span style={{ width: 132, flex: "none", display: "flex", justifyContent: "flex-end" }}>
-                      {seen && fd.flag ? <Pill C={C} tone="amber">FLAGGED</Pill> : null}
+                      {seen && fd.flag ? <Pill C={C} tone="amber">FLAG</Pill> : null}
                     </span>
                   </div>
                 );
