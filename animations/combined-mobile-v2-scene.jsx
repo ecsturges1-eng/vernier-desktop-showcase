@@ -3,7 +3,7 @@ const { useTweaks, TweaksPanel, TweakSection, TweakToggle, TweakSlider, TweakRad
 
 // Mobile centrepiece — the workflow runs top to bottom, one section on screen
 // at a time: monitor → portfolio scan → optimiser → proposal → confirmation.
-const W = 1080, H = 1400;
+const W = 1080, H = 1250;   // content ends 44px clear of the bottom edge
 const BLEED = 32;
 const CARD = { left: -BLEED, top: -BLEED, w: 1080 + BLEED * 2 };
 const PAD = 56, RAIL = 68;               // left gutter carries the collecting trunk

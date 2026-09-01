@@ -4,8 +4,9 @@ const { useTweaks, TweaksPanel, TweakSection, TweakToggle, TweakSlider, TweakRad
 // Centrepiece — the four monitored sections feed one trunk on the right,
 // the trunk scans the portfolio, and the scan hands off to the optimiser.
 const W = 1440, H = 900;
-// Bleeds past all four crop edges; BLEED absorbs the camera drift so no ground
-// can ever show. Internal padding adds it back so content sits where intended.
+// Bleeds past all four crop edges — the live site's own container draws the
+// border, radius and shadow, so nothing is drawn here. BLEED absorbs the
+// camera drift; internal padding adds it back so content sits where intended.
 const BLEED = 32;
 const CARD = { left: -BLEED, top: -BLEED, w: 1440 + BLEED * 2, h: 900 + BLEED * 2 };
 const PADL = 56;
@@ -14,8 +15,8 @@ const COL_W = 544, GUT_X = 600, GUT_W = 160, PANE_X = 760, PANE_W = 544;
 const HDR_H = 44, GRP_H = 34, GRP_GAP = 14;
 // Everything below is derived from the canvas so both columns reach the bottom
 // crop: no hard pane height, no hard row height.
-const BODY_TOP = 116 + 32;                       // BODY_T + BLEED
-const BODY_H = 900 + 32 - BODY_TOP;              // to the bleed edge
+const PAD_B = 44;                                // clearance from the canvas edge
+const BODY_H = 900 - 116 - PAD_B;                // 116 = body top in canvas coords
 const PANE_H = BODY_H;
 const ROW_H = Math.floor((BODY_H - HDR_H - GRP_H * 2 - GRP_GAP) / 9);
 const SCAN_ROW_H = Math.floor((PANE_H - HDR_H - 34) / 6);
@@ -150,7 +151,7 @@ const ret = (f) => 1 / (1 + Math.exp((f - 93) / 6));
 const rev = (f) => AUM * (f / 10000) * ret(f);
 const margin = (f) => (rev(f) - COST) / rev(f);
 const M0 = margin(CURRENT);
-const CW = PANE_W - 48, CH = 300, F0 = 60, F1 = 92;
+const CW = PANE_W - 48, CH = 268, F0 = 60, F1 = 92;
 const X = (f) => ((f - F0) / (F1 - F0)) * CW;
 const Y = (r) => CH - ((r - 30e6) / 17e6) * CH;
 const CURVE = (() => {
@@ -463,10 +464,6 @@ function Combined({ tw }) {
           </div>
           </div>
 
-          {/* scroll rail */}
-          <div style={{ position: "absolute", left: 20, right: 20, bottom: 44, height: 3, background: C.ruleSoft }}>
-            <div style={{ position: "absolute", top: 0, left: `${(pagePos / PAGES) * 100}%`, width: `${100 / PAGES}%`, height: 3, background: C.muted }} />
-          </div>
           </div>
         </div>
       </div>
