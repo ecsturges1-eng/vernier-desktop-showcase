@@ -615,7 +615,11 @@ function Stage({
             transform: `scale(${scale})`,
             transformOrigin: 'center',
             flexShrink: 0,
-            boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
+            // No box-shadow here: it was meant to lift the canvas off the
+            // dark editor letterbox, but production embeds size the canvas
+            // to fill the container exactly (see the barRef fix above), so
+            // the shadow just smeared a dark rectangular edge inside the
+            // host's own rounded card border.
             display: 'block',
           }}
         >
