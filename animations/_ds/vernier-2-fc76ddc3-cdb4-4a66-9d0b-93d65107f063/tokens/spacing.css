@@ -1,0 +1,22 @@
+:root{
+/* 8px base, steps of 8, 16, 24, 32, 48, 64, 96 - brand toolkit p.15 */
+--space-1:8px;
+--space-2:16px;
+--space-3:24px;
+--space-4:32px;
+--space-6:48px;
+--space-8:64px;
+--space-12:96px;
+--space-half:4px; /* half step, inline control padding only */
+
+/* grid - twelve fluid columns, six on tablet, four on mobile */
+--grid-columns:12; /* @kind other */
+--grid-columns-tablet:6; /* @kind other */
+--grid-columns-mobile:4; /* @kind other */
+--grid-gutter:32px;
+--margin-slide:100px;
+--margin-product:64px;
+
+/* alignment: left, always. Centred type is used on cover slides only. */
+--align-default:left; /* @kind other */
+}

@@ -1,0 +1,35 @@
+:root{
+/* borders - one weight only, 1px solid. Never 2px, never coloured
+   except the focus ring. Brand toolkit p.16 */
+--border-width:1px;
+--border-default:1px solid var(--border);
+--border-hover:1px solid var(--border-strong);
+
+/* radius - 6px containers, 3px inline controls, 0 tables and full-bleed */
+--radius-container:6px;
+--radius-control:3px;
+--radius-flat:0px;
+
+/* elevation - two levels only. 0 is flat and bordered, the default.
+   1 keeps its border and is for menus and modals. No glows, no stacks. */
+--elevation-0:none;
+--elevation-1:0 1px 2px rgba(13,27,51,0.06);
+
+/* focus - 2px accent outline, 2px offset. The only place accent blue
+   becomes a border. */
+--focus-ring:2px solid var(--accent);
+--focus-offset:2px;
+
+/* motion - not specified in the brand toolkit; inferred to match a flat,
+   instrument-like system. Short, linear, no bounce, no scale. */
+--motion-fast:120ms; /* @kind other */
+--motion-default:180ms; /* @kind other */
+--motion-ease:cubic-bezier(0.2,0,0.2,1); /* @kind other */
+
+/* iconography - 24-unit grid, 1.5-unit stroke, square caps and joins */
+--icon-stroke:1.5;
+--icon-16:16px;
+--icon-20:20px;
+--icon-24:24px;
+--icon-32:32px;
+}

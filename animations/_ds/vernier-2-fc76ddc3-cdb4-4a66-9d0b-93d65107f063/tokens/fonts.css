@@ -1,0 +1,6 @@
+/* Vernier webfonts. All three families are SIL OFL 1.1 and are served from
+   Google Fonts here; no binaries were supplied with the brand toolkit.
+   Playfair Display 500/600 - Display and Title only.
+   IBM Plex Sans 400/500/600 - body copy, interface, labels.
+   IBM Plex Mono 400/500 - figures in data contexts, tokens, labels. */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');

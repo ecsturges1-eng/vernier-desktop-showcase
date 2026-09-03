@@ -1,0 +1,35 @@
+:root{
+--font-display:"Playfair Display","Playfair Display Medium",Georgia,serif;
+--font-sans:"IBM Plex Sans","Helvetica Neue",Helvetica,sans-serif;
+--font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+
+--weight-regular:400;
+--weight-medium:500;
+--weight-semibold:600;
+
+/* type scale - brand toolkit p.13. size / line-height */
+--size-display:96px;    --leading-display:100px;
+--size-title:64px;      --leading-title:72px;
+--size-subtitle:44px;   --leading-subtitle:56px;
+--size-body:34px;       --leading-body:50px;
+--size-small:28px;      --leading-small:42px;
+--size-label:24px;      --leading-label:32px;
+--tracking-label:0.12em;
+
+/* interface scale. The toolkit scale above is set for presentation surfaces;
+   product UI uses the same families at screen sizes. */
+--size-ui-xl:24px;      --leading-ui-xl:32px;
+--size-ui-lg:20px;      --leading-ui-lg:28px;
+--size-ui-md:15px;      --leading-ui-md:22px;
+--size-ui-sm:13px;      --leading-ui-sm:18px;
+--size-ui-xs:11px;      --leading-ui-xs:16px;
+
+/* composed roles */
+--type-display:var(--weight-medium) var(--size-display)/var(--leading-display) var(--font-display);
+--type-title:var(--weight-medium) var(--size-title)/var(--leading-title) var(--font-display);
+--type-subtitle:var(--weight-medium) var(--size-subtitle)/var(--leading-subtitle) var(--font-sans);
+--type-body:var(--weight-regular) var(--size-body)/var(--leading-body) var(--font-sans);
+--type-small:var(--weight-regular) var(--size-small)/var(--leading-small) var(--font-sans);
+--type-label:var(--weight-regular) var(--size-label)/var(--leading-label) var(--font-mono);
+--type-figure:var(--weight-medium) var(--size-ui-xl)/var(--leading-ui-xl) var(--font-mono);
+}

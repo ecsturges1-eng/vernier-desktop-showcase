@@ -1,0 +1,9 @@
+/* Minimal element defaults so consumers inherit the brand without utilities. */
+body{font:var(--weight-regular) var(--size-ui-md)/var(--leading-ui-md) var(--font-sans);color:var(--text-body);background:var(--surface);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6{color:var(--text-heading);margin:0}
+h1,h2{font-family:var(--font-display);font-weight:var(--weight-medium)}
+h3,h4,h5,h6{font-family:var(--font-sans);font-weight:var(--weight-semibold)}
+a{color:var(--link);text-decoration:none}
+a:hover{color:var(--link);text-decoration:underline;text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:var(--focus-ring);outline-offset:var(--focus-offset)}
+:root{--table-numeric-font:var(--font-mono)}

@@ -1,0 +1,51 @@
+:root{
+/* base palette - brand toolkit p.09 */
+--white:#FFFFFF;
+--paper:#F7F8FA;
+--hairline:#E2E5EB;
+--hairline-strong:#C9CFD9;
+--blue:#2E4BA0;
+--blue-tint:#EEF1FA;
+--navy:#0D1B33;
+--slate:#48546B;
+--grey:#8A93A3;
+
+/* semantic surface + ink - brand toolkit p.10 */
+--surface:var(--white);
+--surface-sunken:var(--paper);
+--surface-selected:var(--blue-tint);
+--surface-ink:var(--navy);
+--ink:var(--navy);
+--ink-secondary:var(--slate);
+--ink-muted:var(--grey);
+--ink-reversed:var(--white);
+--border:var(--hairline);
+--border-strong:var(--hairline-strong);
+--accent:var(--blue);
+--accent-tint:var(--blue-tint);
+
+/* status - brand toolkit p.11. Never travels alone: every coloured value
+   carries a label or figure stating the threshold it was measured against. */
+--negative:#B42318;
+--negative-tint:#FEF3F2;
+--caution:#B54708;
+--caution-tint:#FFFAEB;
+--positive:#067647;
+--positive-tint:#ECFDF3;
+
+/* data visualisation - five steps of one blue, p.18.
+   Series beyond five are aggregated into "Other". */
+--series-1:#1B2E63;
+--series-2:#2E4BA0;
+--series-3:#5B77C4;
+--series-4:#93A6DC;
+--series-5:#C6D1EE;
+--series-other:var(--hairline-strong);
+--chart-gridline:var(--hairline);
+
+/* aliases used by text and links */
+--text-body:var(--ink-secondary);
+--text-heading:var(--ink);
+--text-label:var(--ink-muted);
+--link:var(--accent);
+}
