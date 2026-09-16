@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/colors.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/typography.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/surface.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/base.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/styles.css">
+<script src="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#2E4BA0}
+a:hover{color:#263F87}
+[data-omelette-chrome]{display:none !important;}
+</style>
+<script>window.OM_SCENES = '[{"name":"Distribution","dur":1.8,"desc":"The observed market price distribution builds band by band across the plot."},{"name":"Position","dur":1.8,"desc":"Your list price and the market median are marked, and the gap between them measured."},{"name":"Headroom","dur":2.0,"desc":"The recommended price sweeps up through the headroom band."},{"name":"Deliver","dur":2.8,"desc":"A highlight runs the panel border and travels to the outcome card: move, revenue effect, confidence."}]';</script>
+<script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
+<script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "speed": 0.35,
+  "radius": 0
+}/*EDITMODE-END*/;</script>
+</helmet>
+<x-import component-from-global-scope="OptimisePlotPiece" from="./animations-v3-reel.jsx ./tweaks-panel.jsx ./product-optimise-scene.jsx" hint-size="100%,100%"></x-import>
+</x-dc>
+</body>
+</html>

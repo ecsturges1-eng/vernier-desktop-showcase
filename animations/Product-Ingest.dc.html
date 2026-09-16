@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/colors.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/typography.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/surface.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/base.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/styles.css">
+<script src="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#2E4BA0}
+a:hover{color:#263F87}
+[data-omelette-chrome]{display:none !important;}
+</style>
+<script>window.OM_SCENES = '[{"name":"Sources","dur":2.4,"desc":"The collation panel arrives on the reveal bezier, then five source frames build row by row at the 90ms cadence, each connector wiping once its own row has settled."},{"name":"Flow","dur":3.4,"desc":"All five source borders run their highlight on one clock, a 30ms cascade apart, and travel their connectors into the panel. A live stream, so it runs linear with no easing."},{"name":"Collate","dur":2.6,"desc":"The panel content swaps: the awaiting state leaves in 120ms, and after a 40ms gap the reading arrives in 180ms. The figure and its bar run one clock and land together, then the seal clicks into place."},{"name":"Settle","dur":2.2,"desc":"The stream thins and the window and confidence line reveals beneath the panel."}]';</script>
+<script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
+<script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "speed": 0.35,
+  "labels": true,
+  "radius": 0
+}/*EDITMODE-END*/;</script>
+</helmet>
+<x-import component-from-global-scope="IngestPiece" from="./animations-v3-reel.jsx ./tweaks-panel.jsx ./product-ingest-scene.jsx" hint-size="100%,100%"></x-import>
+</x-dc>
+</body>
+</html>
