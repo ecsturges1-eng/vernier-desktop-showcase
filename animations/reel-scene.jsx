@@ -1,8 +1,8 @@
 const { useComposition, CompositionStage, animate, clamp, Easing } = window;
 const { useTweaks, TweaksPanel, TweakSection, TweakToggle, TweakRadio } = window;
 
-const DS = window.VernierDesignSystem_fc76dd || {};
-const { MetricCard, Badge, Delta, Card, Button } = DS;
+const DS = window.VernierDesignSystem_89b06b || {};
+const { Badge, Button, Figure } = DS;
 
 // Primer-style workflow reel: Monitor → Optimise → Implement → Defend.
 // Four progress markers across the top; one section on screen at a time.
@@ -11,7 +11,7 @@ const PAD = 64, PAD_B = 40;              // product margin, brand toolkit p.15
 const INNER = W - PAD * 2;
 const BODY_T = 196;
 const GUTTER = 32;
-const R = 3;                              // container edge radius for this reel
+const R = 0;                              // Vernier 3: one radius
 const COL_W = (INNER - 48) / 2;          // Implement, two columns
 const DEF_GAP = 24;
 const DEF_W = (INNER - DEF_GAP * 2) / 3; // Defend, three panels
@@ -20,13 +20,13 @@ const MOTION = { enter: Easing.easeOutCubic, draw: Easing.easeInOutQuart };
 
 const STEPS = ["MONITOR", "OPTIMISE", "IMPLEMENT", "DEFEND"];
 
-// Vernier 2: white is the ground, one navy ink, one accent, status colour only
+// Vernier 3: white is the ground, one navy ink, one accent, status colour only
 // where a value has been measured against a threshold.
 const C = {
   bg: "#FFFFFF",
-  text: "#0D1B33",
+  text: "#06122A",
   dim: "#48546B",
-  label: "#8A93A3",
+  label: "#48546B",
   accent: "#2E4BA0",
   tint: "#EEF1FA",
   border: "#E2E5EB",
@@ -145,6 +145,8 @@ const RATIONALE = [
 ];
 
 const MONO_SM = { font: "400 13px/1 var(--font-mono)", letterSpacing: "0.12em", fontVariantNumeric: "tabular-nums" };
+const MARK_NUM = { font: "400 16px/1 var(--font-mono)", letterSpacing: "0.12em", fontVariantNumeric: "tabular-nums" };
+const MARK_LABEL = { font: "400 22px/1 var(--font-mono)", letterSpacing: "0.1em" };
 const MONO_XS = { font: "400 11px/1 var(--font-mono)", letterSpacing: "0.12em", fontVariantNumeric: "tabular-nums" };
 const CHIP = { padding: "5px 9px", letterSpacing: "0.12em" };
 
@@ -160,8 +162,8 @@ function Markers({ idx, within }) {
               <div style={{ height: 3, width: `${fill * 100}%`, background: done ? C.borderStrong : C.accent }} />
             </div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-              <span style={{ ...MONO_XS, color: C.label }}>{String(i + 1).padStart(2, "0")}</span>
-              <span style={{ ...MONO_SM, color: done || live ? C.text : C.label }}>{s}</span>
+              <span style={{ ...MARK_NUM, color: C.label }}>{String(i + 1).padStart(2, "0")}</span>
+              <span style={{ ...MARK_LABEL, color: done || live ? C.text : C.label }}>{s}</span>
             </div>
           </div>
         );
@@ -209,15 +211,21 @@ function Headline({ text, appear, wipe }) {
 }
 
 function Metric({ label, value, delta, unit, invert, confidence, appear }) {
+  const flat = Math.abs(delta) < 0.005;
+  const up = invert ? delta < 0 : delta > 0;
+  const signed = `${delta >= 0 ? "+" : "−"}${Math.abs(delta).toFixed(2)}${unit}`;
   return (
-    <div style={{ opacity: appear, transform: `translateY(${(1 - appear) * 10}px)` }}>
-      <MetricCard
-        label={label}
-        value={value}
-        confidence={confidence}
-        footnote={<Delta value={delta} unit={unit} invert={invert} size="sm" />}
-        style={{ borderRadius: R }}
-      />
+    <div style={{
+      boxSizing: "border-box", border: `1px solid ${C.border}`, borderRadius: R,
+      padding: "18px 20px", display: "flex", flexDirection: "column", gap: 16,
+      opacity: appear, transform: `translateY(${(1 - appear) * 10}px)`
+    }}>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+        <span style={{ ...MONO_XS, color: C.label }}>{label.toUpperCase()}</span>
+        <span style={{ flex: 1 }} />
+        {confidence != null && <span style={{ ...MONO_XS, color: C.label }}>CONF {confidence.toFixed(2)}</span>}
+      </div>
+      <Figure value={value} size="lg" delta={signed} direction={flat ? "flat" : up ? "up" : "down"} />
     </div>
   );
 }
@@ -343,9 +351,8 @@ function Reel({ tw }) {
       </div>
 
       <div style={{ position: "absolute", left: PAD, bottom: PAD_B }}>
-        <Button variant="secondary" size="sm" style={{ borderRadius: R }}
-                iconLeft={<span style={{ ...MONO_XS, color: C.accent }}>AI</span>}>
-          Ask Vernier
+        <Button variant="secondary" size="sm" style={{ borderRadius: R }}>
+          <span style={{ ...MONO_XS, color: C.accent }}>AI</span>Ask Vernier
         </Button>
       </div>
 

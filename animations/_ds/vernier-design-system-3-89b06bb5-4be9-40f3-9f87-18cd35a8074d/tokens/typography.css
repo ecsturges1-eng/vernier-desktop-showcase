@@ -1,0 +1,36 @@
+:root{
+--font-display:'Playfair Display',Georgia,serif;
+--font-sans:'IBM Plex Sans',system-ui,sans-serif;
+--font-mono:'IBM Plex Mono',ui-monospace,monospace;
+
+--weight-regular:400;
+--weight-medium:500;
+--weight-semibold:600;
+
+/* marketing + deck scale — Playfair for display/title, Plex Sans below */
+--type-display:500 96px/100px var(--font-display);
+--type-title:500 64px/72px var(--font-display);
+--type-heading:500 44px/52px var(--font-display);
+--type-subheading:500 28px/36px var(--font-display);
+--type-subtitle:400 44px/56px var(--font-sans);
+--type-lead:400 20px/32px var(--font-sans);
+--type-body-deck:400 34px/50px var(--font-sans);
+--type-small-deck:400 28px/42px var(--font-sans);
+
+/* interface scale — Plex Sans, roman, ink; no Playfair, no signature word */
+--type-ui-xl:500 24px/32px var(--font-sans);
+--type-ui-lg:500 20px/28px var(--font-sans);
+--type-ui-md:400 15px/22px var(--font-sans);
+--type-ui-sm:400 13px/20px var(--font-sans);
+
+/* mono — every label and every figure in a data context */
+--type-label:400 11px/16px var(--font-mono);
+--type-label-deck:400 24px/32px var(--font-mono);
+--type-figure-sm:500 20px/28px var(--font-mono);
+--type-figure:500 28px/36px var(--font-mono);
+--type-figure-lg:500 44px/52px var(--font-mono);
+--type-data:400 13px/18px var(--font-mono);
+
+--tracking-label:0.12em;
+--tracking-mono:0.02em;
+}

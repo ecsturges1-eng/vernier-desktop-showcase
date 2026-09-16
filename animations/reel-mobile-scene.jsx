@@ -1,25 +1,25 @@
 const { useComposition, CompositionStage, animate, clamp, Easing } = window;
 const { useTweaks, TweaksPanel, TweakSection, TweakToggle } = window;
 
-const DS = window.VernierDesignSystem_fc76dd || {};
-const { MetricCard, Badge, Delta } = DS;
+const DS = window.VernierDesignSystem_89b06b || {};
+const { Badge, Figure } = DS;
 
 // Narrow companion to the desktop reel: same four stages, same cue names, one
 // column. Content is trimmed rather than shrunk — nothing is set below 13px.
-const W = 390, H = 800;
+const W = 390, H = 760;
 const PAD = 24, PAD_B = 28;
 const INNER = W - PAD * 2;
-const BODY_T = 136;
-const R = 3;
+const BODY_T = 124;
+const R = 0;
 
 const MOTION = { enter: Easing.easeOutCubic, draw: Easing.easeInOutQuart };
 const STEPS = ["MONITOR", "OPTIMISE", "IMPLEMENT", "DEFEND"];
 
 const C = {
   bg: "#FFFFFF",
-  text: "#0D1B33",
+  text: "#06122A",
   dim: "#48546B",
-  label: "#8A93A3",
+  label: "#48546B",
   accent: "#2E4BA0",
   tint: "#EEF1FA",
   border: "#E2E5EB",
@@ -146,7 +146,7 @@ function Header({ idx, within }) {
 
 function GroupLabel({ name, meta }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, height: 30 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 10, height: 28 }}>
       <span style={{ ...MONO_10, color: C.label }}>{name}</span>
       <span style={{ flex: 1 }} />
       {meta && <span style={{ ...MONO_10, color: C.label }}>{meta}</span>}
@@ -158,9 +158,9 @@ function GroupLabel({ name, meta }) {
 // the sentence wipes in over them.
 function FeedRow({ row, s }) {
   return (
-    <div style={{ height: 76, boxSizing: "border-box", borderTop: `1px solid ${C.border}`, paddingTop: 12, display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ height: 72, boxSizing: "border-box", borderTop: `1px solid ${C.border}`, paddingTop: 11, display: "flex", flexDirection: "column", gap: 10 }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-        <span style={{ font: "500 16px/1.2 var(--font-sans)", color: C.text }}>{row.title}</span>
+        <span style={{ font: "500 15px/1.2 var(--font-sans)", color: C.text }}>{row.title}</span>
         <span style={{ flex: 1 }} />
         <span style={{ ...MONO_10, color: C.label, whiteSpace: "nowrap" }}>{row.meta}</span>
       </div>
@@ -173,7 +173,7 @@ function FeedRow({ row, s }) {
         </div>
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", gap: 8, opacity: s.box }}>
           <span style={{ width: 3, height: 14, flex: "none", background: C.accent }} />
-          <span style={{ font: "400 14px/1.4 var(--font-sans)", color: C.text, whiteSpace: "nowrap", clipPath: `inset(0 ${(1 - s.wipe) * 100}% 0 0)` }}>{row.head}</span>
+          <span style={{ font: "400 13px/1.4 var(--font-sans)", color: C.text, whiteSpace: "nowrap", clipPath: `inset(0 ${(1 - s.wipe) * 100}% 0 0)` }}>{row.head}</span>
         </div>
       </div>
     </div>
@@ -182,13 +182,13 @@ function FeedRow({ row, s }) {
 
 function Step({ row, done }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12, height: 52, boxSizing: "border-box", borderTop: `1px solid ${C.border}` }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 12, height: 50, boxSizing: "border-box", borderTop: `1px solid ${C.border}` }}>
       <span style={{
         width: 9, height: 9, flex: "none", borderRadius: 2,
         background: done > 0.5 ? C.positive : "transparent",
         border: done > 0.5 ? "none" : `1px solid ${C.borderStrong}`
       }} />
-      <span style={{ flex: 1, minWidth: 0, font: "400 15px/1.3 var(--font-sans)", color: done > 0.2 ? C.text : C.label, whiteSpace: "nowrap" }}>{row.title}</span>
+      <span style={{ flex: 1, minWidth: 0, font: "400 14px/1.3 var(--font-sans)", color: done > 0.2 ? C.text : C.label, whiteSpace: "nowrap" }}>{row.title}</span>
       {row.kind === "progress" ? (
         <span style={{ display: "flex", alignItems: "center", gap: 10, flex: "none" }}>
           <span style={{ width: 48, height: 4, background: C.border }}>
@@ -208,7 +208,7 @@ function Step({ row, done }) {
 function Doc({ row, appear }) {
   return (
     <div style={{
-      display: "flex", flexDirection: "column", gap: 5, height: 50, boxSizing: "border-box", justifyContent: "center",
+      display: "flex", flexDirection: "column", gap: 5, height: 46, boxSizing: "border-box", justifyContent: "center",
       padding: "0 14px", borderTop: `1px solid ${C.border}`, opacity: appear, transform: `translateY(${(1 - appear) * 6}px)`
     }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
@@ -216,7 +216,22 @@ function Doc({ row, appear }) {
         <span style={{ flex: 1 }} />
         <span style={{ ...MONO_10, color: C.accent, whiteSpace: "nowrap" }}>{row.tag}</span>
       </div>
-      <span style={{ font: "400 14px/1.3 var(--font-sans)", color: C.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{row.title}</span>
+      <span style={{ font: "400 13px/1.3 var(--font-sans)", color: C.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{row.title}</span>
+    </div>
+  );
+}
+
+function Metric({ label, value, delta, unit, appear }) {
+  const flat = Math.abs(delta) < 0.005;
+  const signed = `${delta >= 0 ? "+" : "−"}${Math.abs(delta).toFixed(2)}${unit}`;
+  return (
+    <div style={{
+      minWidth: 0, boxSizing: "border-box", border: `1px solid ${C.border}`, borderRadius: R,
+      padding: "12px 14px", display: "flex", flexDirection: "column", gap: 10,
+      opacity: appear, transform: `translateY(${(1 - appear) * 8}px)`
+    }}>
+      <span style={{ ...MONO_10, color: C.label, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
+      <Figure value={value} size="md" delta={signed} direction={flat ? "flat" : delta > 0 ? "up" : "down"} />
     </div>
   );
 }
@@ -272,7 +287,7 @@ function Reel() {
 
   return (
     <div style={{ position: "absolute", inset: 0, background: C.bg, overflow: "hidden", fontFamily: "var(--font-sans)" }}>
-      <div style={{ position: "absolute", left: PAD, top: 52, width: INNER }}>
+      <div style={{ position: "absolute", left: PAD, top: 46, width: INNER }}>
         <Header idx={idx} within={within} />
       </div>
 
@@ -290,15 +305,15 @@ function Reel() {
       <div style={{ ...body, opacity: s1.o, transform: `translateY(${s1.y}px)` }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 10, opacity: sumIn, transform: `translateY(${(1 - sumIn) * 8}px)` }}>
           <span style={{ ...MONO_10, color: C.label }}>RECOMMENDED ONGOING CHARGE</span>
-          <span style={{ font: "500 30px/1 var(--font-mono)", letterSpacing: "-0.01em", color: C.text, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
+          <span style={{ font: "500 28px/1 var(--font-mono)", letterSpacing: "-0.01em", color: C.text, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
             0.72% <span style={{ color: C.label }}>→</span> <span style={{ color: C.accent }}>0.78%</span>
           </span>
-          <span style={{ font: "400 14px/1.5 var(--font-sans)", color: C.dim }}>
+          <span style={{ font: "400 13px/1.5 var(--font-sans)", color: C.dim }}>
             Protects £45.41m of annual net revenue, £1.38m above the current schedule. Confidence 0.94.
           </span>
         </div>
 
-        <div style={{ marginTop: 24, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+        <div style={{ marginTop: 20, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span style={{ ...MONO_10, color: C.label }}>NET REVENUE · £M</span>
           <span style={{ ...MONO_10, color: C.accent }}>{f.toFixed(2)}BPS</span>
         </div>
@@ -318,14 +333,8 @@ function Reel() {
         </div>
 
         <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          <div style={{ minWidth: 0, opacity: met(0), transform: `translateY(${(1 - met(0)) * 8}px)` }}>
-            <MetricCard label="Operating margin, %" value={(m * 100).toFixed(2)}
-                        footnote={<Delta value={(m - M0) * 100} unit="pp" size="sm" />} style={{ borderRadius: R }} />
-          </div>
-          <div style={{ minWidth: 0, opacity: met(1), transform: `translateY(${(1 - met(1)) * 8}px)` }}>
-            <MetricCard label="Net revenue, £m" value={(r / 1e6).toFixed(2)}
-                        footnote={<Delta value={(r - R0) / 1e6} unit="m" size="sm" />} style={{ borderRadius: R }} />
-          </div>
+          <Metric label="OPERATING MARGIN, %" value={(m * 100).toFixed(2)} delta={(m - M0) * 100} unit="pp" appear={met(0)} />
+          <Metric label="NET REVENUE, £M" value={(r / 1e6).toFixed(2)} delta={(r - R0) / 1e6} unit="m" appear={met(1)} />
         </div>
       </div>
 
@@ -338,24 +347,24 @@ function Reel() {
           </div>
         ))}
 
-        <div style={{ marginTop: 16, border: `1px solid ${C.border}`, borderRadius: R, overflow: "hidden" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, height: 50, boxSizing: "border-box", padding: "0 14px", background: C.sunken }}>
-            <span style={{ font: "500 15px/1.3 var(--font-sans)", color: C.text }}>Legal and compliance centre</span>
+        <div style={{ marginTop: 12, border: `1px solid ${C.border}`, borderRadius: R, overflow: "hidden" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, height: 48, boxSizing: "border-box", padding: "0 14px", background: C.sunken }}>
+            <span style={{ font: "500 14px/1.3 var(--font-sans)", color: C.text }}>Legal and compliance centre</span>
             <span style={{ flex: 1 }} />
             <span style={{ opacity: scanAt(2) }}>
               <Badge tone="positive" mono style={CHIP}>3 / 3 PASS</Badge>
             </span>
           </div>
-          <div style={{ height: 138 * expand, overflow: "hidden" }}>
+          <div style={{ height: 126 * expand, overflow: "hidden" }}>
             {SCANS.map((sc, i) => {
               const a = scanAt(i);
               return (
                 <div key={sc} style={{
-                  display: "flex", alignItems: "center", gap: 12, height: 46, boxSizing: "border-box",
+                  display: "flex", alignItems: "center", gap: 12, height: 42, boxSizing: "border-box",
                   padding: "0 14px", borderTop: `1px solid ${C.border}`, opacity: a
                 }}>
                   <span style={{ width: 9, height: 9, flex: "none", borderRadius: 2, background: a > 0.5 ? C.positive : C.border }} />
-                  <span style={{ font: "400 14px/1.3 var(--font-sans)", color: C.text }}>{sc}</span>
+                  <span style={{ font: "400 13px/1.3 var(--font-sans)", color: C.text }}>{sc}</span>
                   <span style={{ flex: 1 }} />
                   <span style={{ ...MONO_10, color: C.positive }}>PASS</span>
                 </div>
@@ -386,7 +395,7 @@ function Reel() {
 
         <div style={{
           marginTop: 16, border: `1px solid ${C.borderStrong}`, borderRadius: R, background: C.tint,
-          padding: "16px 16px 18px", display: "flex", flexDirection: "column", gap: 12,
+          padding: "14px 14px 16px", display: "flex", flexDirection: "column", gap: 10,
           opacity: ratIn(0), transform: `translateY(${(1 - ratIn(0)) * 8}px)`
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -395,7 +404,7 @@ function Reel() {
             <span style={{ flex: 1 }} />
             <span style={{ ...MONO_10, color: C.label }}>VR-2291</span>
           </div>
-          <span style={{ font: "500 15px/1.4 var(--font-sans)", color: C.text, opacity: ratIn(0) }}>{RATIONALE[0]}</span>
+          <span style={{ font: "500 14px/1.4 var(--font-sans)", color: C.text, opacity: ratIn(0) }}>{RATIONALE[0]}</span>
           <span style={{ font: "400 11px/1.5 var(--font-mono)", letterSpacing: "0.02em", color: C.dim, fontVariantNumeric: "tabular-nums", opacity: ratIn(1) }}>{RATIONALE[1]}</span>
         </div>
       </div>

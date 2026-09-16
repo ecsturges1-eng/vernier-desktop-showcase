@@ -1,0 +1,39 @@
+:root{
+/* ---- base palette -------------------------------------------------- */
+--white:#FFFFFF;
+--paper:#F7F8FA;            /* page ground */
+--hairline:#E2E5EB;         /* 1px rules on white — 1.26:1 */
+--hairline-strong:#C9CFD9;
+--accent-tint:#EEF1FA;
+--accent:#2E4BA0;
+--accent-hover:#263F87;
+--accent-series-4:#93A6DC;  /* the one lighter accent in the palette */
+--slate:#48546B;
+--navy:#06122A;             /* ink — deepened from #0D1B33, addition 08 */
+--grey:#8A93A3;
+--brand-cyan:#49C4F1;       /* the mark's indicator tick, from the supplied SVG */
+
+/* ---- semantic: light ground ---------------------------------------- */
+--ink:var(--navy);
+--ink-secondary:var(--slate);
+--ink-muted:var(--grey);
+--border:var(--hairline);
+--border-strong:var(--hairline-strong);
+--surface:var(--white);
+--surface-sunken:var(--paper);
+--surface-accent:var(--accent-tint);
+
+/* ---- status --------------------------------------------------------- */
+--positive:#067647;
+--positive-tint:#E6F2EB;    /* INFERRED — not stated in the toolkit */
+--negative:#B3261E;         /* INFERRED — not stated in the toolkit */
+--negative-tint:#FBEAE8;    /* INFERRED */
+
+/* ---- semantic: ink-reversed ground (#06122A only) ------------------- */
+--ink-reversed:#FFFFFF;            /* 18.62:1 */
+--ink-reversed-secondary:#A8B2C4;  /* 8.71:1 */
+--ink-reversed-muted:#7A85A0;      /* 5.05:1 */
+--ink-reversed-border:#1C2843;     /* 1.27:1, non-text */
+--accent-on-ink:var(--accent-series-4); /* 7.74:1 — inline accent on ink */
+--surface-ink:var(--navy);
+}

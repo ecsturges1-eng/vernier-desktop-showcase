@@ -1,0 +1,25 @@
+:root{
+/* 8px grid. 4px is the only half-step, for label-to-figure pairs. */
+--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;
+--space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;--space-14:56px;
+--space-16:64px;--space-18:72px;--space-20:80px;--space-22:88px;--space-24:96px;
+
+/* measured application paddings, taken from the toolkit specimens */
+--pad-button-sm:9px 14px;
+--pad-button-md:13px 20px;
+--pad-button-lg:15px 22px;
+--pad-input:9px 10px;
+--pad-badge:4px 8px;
+--pad-cell:9px 10px;
+--pad-cell-head:8px 10px;
+--pad-panel:32px;
+--pad-doc:80px 88px 96px;
+--pad-web-gutter:64px;
+--pad-slide:100px;
+
+--measure-prose:760px;
+--measure-doc:1180px;
+--width-web:1440px;
+--slide-w:1920px;
+--slide-h:1080px;
+}

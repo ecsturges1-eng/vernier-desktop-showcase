@@ -1,0 +1,18 @@
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;background:var(--paper);color:var(--ink);font:var(--type-ui-md);font-feature-settings:"tnum" 1}
+*,*::before,*::after{box-sizing:border-box}
+h1,h2,h3,h4,h5,h6,p{margin:0;text-wrap:pretty}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-hover);text-decoration:underline;text-underline-offset:2px}
+em{font-style:italic}
+button,input,select,textarea{font:inherit;color:inherit;border-radius:var(--radius)}
+table{border-collapse:collapse}
+:focus-visible{outline:1px solid var(--accent);outline-offset:1px}
+.v-label{font:var(--type-label);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-muted)}
+.v-figure{font:var(--type-figure);color:var(--ink)}
+@keyframes v-reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes v-wipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes v-fade{from{opacity:0}to{opacity:1}}
+@keyframes v-spring{0%{opacity:0;transform:scale(.94)}28%{opacity:1}55%{transform:scale(1.04)}78%{transform:scale(.996)}100%{transform:scale(1);opacity:1}}
+@keyframes v-swap{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:120ms!important;animation-name:v-fade!important;transition-duration:120ms!important}}

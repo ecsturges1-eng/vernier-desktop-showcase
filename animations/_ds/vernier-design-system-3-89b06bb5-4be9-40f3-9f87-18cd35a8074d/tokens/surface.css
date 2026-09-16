@@ -1,0 +1,31 @@
+:root{
+/* One radius. One border weight. Nothing else. */
+--radius:0px;
+--border-width:1px;
+--rule:1px solid var(--border);
+--rule-ink:1px solid var(--ink-reversed-border);
+
+--elevation-0:none;
+--elevation-1:0 1px 2px rgba(6,18,42,0.06);   /* menus, modals — product UI ceiling */
+--elevation-2:0 4px 16px rgba(6,18,42,0.10);  /* one marketing hero element per view */
+
+/* the graduation-tick divider (addition 07b) — marketing surfaces only */
+--tick-interval:24px;
+--tick-interval-inline:12px;
+--tick-span:96px;
+--tick-span-inline:48px;
+--tick-indicator-offset:84px;
+
+/* motion */
+--ease-entrance:cubic-bezier(.16,1,.3,1); /* @kind other */
+--ease-count:cubic-bezier(.22,1,.36,1); /* @kind other */
+--ease-swap:cubic-bezier(.2,0,.2,1); /* @kind other */
+--dur-reveal:520ms; /* @kind other */
+--dur-wipe:640ms; /* @kind other */
+--dur-count:900ms; /* @kind other */
+--dur-confirm:560ms; /* @kind other */
+--dur-swap-out:120ms; /* @kind other */
+--dur-swap-in:180ms; /* @kind other */
+--stagger:90ms; /* @kind other */
+--stagger-dense:60ms; /* @kind other */
+}
