@@ -22,14 +22,14 @@ a{color:#2E4BA0}
 a:hover{color:#263F87}
 [data-omelette-chrome]{display:none !important;}
 </style>
-<script>window.OM_SCENES = '[{"name":"Distribution","dur":1.8,"desc":"The observed market price distribution builds band by band across the plot."},{"name":"Position","dur":1.8,"desc":"Your list price and the market median are marked, and the gap between them measured."},{"name":"Headroom","dur":2.0,"desc":"The recommended price sweeps up through the headroom band."},{"name":"Deliver","dur":2.8,"desc":"A highlight runs the panel border and travels to the outcome card: move, revenue effect, confidence."}]';</script>
+<script>window.OM_SCENES = '[{"name":"Distribution","dur":1.8,"desc":"The caliper\'s main scale arrives, graduated every £2.00, and the pointer settles at an approximate reading near 118."},{"name":"Position","dur":1.8,"desc":"A controlled push-in on the pointer: the main scale opens out and the ten-division vernier sub-scale draws in beneath it."},{"name":"Headroom","dur":2,"desc":"The zoom settles and division 2 locks — the one that lines up with a main graduation, supplying the .40. Price, confidence and revenue impact refine on the same clock."},{"name":"Deliver","dur":2.8,"desc":"The reasoned price stands with its confidence and revenue delta, the sub-scale retained beneath as the working, then the view releases back to the wide scale."}]';</script>
 <script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
 <script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "speed": 0.35,
-  "radius": 0
+  "depth": 24,
+  "loopFloor": 0.15
 }/*EDITMODE-END*/;</script>
 </helmet>
-<x-import component-from-global-scope="OptimisePlotPiece" from="./animations-v3-reel.jsx ./tweaks-panel.jsx ./product-optimise-scene.jsx" hint-size="100%,100%"></x-import>
+<x-import component-from-global-scope="OptimisePlotPiece" from="./animations-v3-reel.jsx ./tweaks-panel.jsx ./product-shared.jsx ./product-optimise-scene.jsx" hint-size="100%,100%"></x-import>
 </x-dc>
 </body>
 </html>
