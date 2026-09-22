@@ -24,17 +24,25 @@ const MAIN_Y = 300;                      // main scale baseline, ticks rise from
 const SUB_Y = 340;                       // sub-scale body, ticks fall from its top
 const SUB_H = 64;
 
-const TARGET = 118.40;                   // the reading
-const MAIN_STEP = 2.0;                   // main scale graduation
+// The scale is graduated in basis points, so the numerals under the pointer
+// and the headline metric are the same number rather than two units the
+// viewer has to reconcile.
+const TARGET = 31.0;                     // the reading, in bp vs current list
+const MAIN_STEP = 2.0;                   // main scale graduation, bp
 const DIVS = 10;                         // sub-scale divisions
 const SUB_STEP = MAIN_STEP * (DIVS - 1) / DIVS;   // 1.80 — nine mains over ten divisions
-const MAIN_FLOOR = Math.floor(TARGET / MAIN_STEP) * MAIN_STEP;     // 118
-const FRACTION = TARGET - MAIN_FLOOR;                              // 0.40
+const MAIN_FLOOR = Math.floor(TARGET / MAIN_STEP) * MAIN_STEP;     // 30
+const FRACTION = TARGET - MAIN_FLOOR;                              // 1.0
 // the division that lands on a main graduation — the reading's working
-const ALIGNED = Math.round(FRACTION / (MAIN_STEP / DIVS));         // 2
+const ALIGNED = Math.round(FRACTION / (MAIN_STEP / DIVS));         // 5
 
-const WIDE_SPAN = 120, WIDE_CENTRE = 120;
-const LIST = 113.85;                     // current list price — the reading is +400bp on this
+const WIDE_SPAN = 100, WIDE_CENTRE = 50;
+// Every figure derives from the reading: list price turns basis points into
+// pounds, the revenue base turns them into impact — so the scale and the
+// bottom-right number cannot disagree.
+const LIST = 115.51;                     // current list price, £ per unit
+const REV_BASE = 127.0;                  // £m of affected revenue
+const RULER = "#3E4756";                 // scale ink: a darker grey, not black
 
 function Optimise({ tw }) {
   const { T, CUES, authoredTotal } = useComposition();
@@ -68,11 +76,15 @@ function Optimise({ tw }) {
   const lock = clamp(at(CUES.Headroom + 0.3, 0.56, SPRING) - zoomOut, 0, 1);
 
   // ---- figures, interpolated on the zoom clock ---------------------------
-  const price = MAIN_FLOOR + FRACTION * ez;
-  const bps = (price / LIST - 1) * 10000;
+  // The reading itself is in basis points: coarse 30, refining to 31 as the
+  // vernier locks. Price and impact are both functions of it.
+  const bps = MAIN_FLOOR + FRACTION * ez;
+  const price = LIST * (1 + bps / 10000);
   const conf = 0.71 + 0.25 * ez;
-  const delta = 2.40 + 0.78 * ez;
+  const delta = (bps / 10000) * REV_BASE;
   const risk = clamp(at(CUES.Headroom, REVEAL_MS, REVEAL) - zoomOut, 0, 1);
+  // the track turns green the moment the vernier locks the reading
+  const optimised = clamp(at(CUES.Headroom + 0.55, 0.4, REVEAL) - zoomOut * 2, 0, 1);
 
   const seal = clamp(at(CUES.Deliver + 0.3, 0.56, SPRING) - zoomOut * 1.6, 0, 1);
   const fade = loopFade(T, authoredTotal, tw.loopFloor, 0.45);
@@ -81,12 +93,16 @@ function Optimise({ tw }) {
   const lo = centre - span * anchor * 1.05, hi = centre + span * (1 - anchor) * 1.05;
   const mains = [];
   const first = Math.ceil(lo / MAIN_STEP) * MAIN_STEP;
+  const COINCIDENT = TARGET + ALIGNED * SUB_STEP;   // 40 bp — where the two scales meet
   for (let p = first; p <= hi; p += MAIN_STEP) {
     const px = x(p);
     if (px < PX || px > PX + PW) continue;
     const major = Math.abs(p % 10) < 1e-6;
     const nx = (px - PX) / PW;
-    mains.push({ p, px, major, on: clamp((beam * 1.15 - nx) * 6, 0, 1) });
+    mains.push({
+      p, px, major, on: clamp((beam * 1.15 - nx) * 6, 0, 1),
+      meets: Math.abs(p - COINCIDENT) < 1e-6
+    });
   }
 
   const divs = Array.from({ length: DIVS + 1 }).map((_, k) => {
@@ -101,15 +117,13 @@ function Optimise({ tw }) {
   const CELLS = [
     {
       l: "RECOMMENDED PRICE",
-      v: "£" + price.toFixed(2),
-      c: C.ink, hero: true,
-      note: ez > 0.02 ? "MAIN " + MAIN_FLOOR.toFixed(0) + " + VERNIER " + FRACTION.toFixed(2) : "APPROXIMATE"
+      v: "+" + Math.round(bps) + " BP",
+      c: C.ink, hero: true, slider: true
     },
-    { l: "UPLIFT", v: "+" + Math.round(bps) + " BP", c: C.ink, note: "VS LIST £" + LIST.toFixed(2) },
     { l: "CONFIDENCE", v: conf.toFixed(2), c: C.ink, note: "N = 18 OBSERVATIONS" },
     {
       l: "REVENUE IMPACT", v: "+£" + delta.toFixed(2) + "M", c: C.pos,
-      note: "IF UNCHANGED −£1.90M", noteC: C.neg, noteO: risk
+      note: "ON £" + REV_BASE.toFixed(0) + "M AFFECTED", noteO: risk
     }
   ];
 
@@ -121,16 +135,19 @@ function Optimise({ tw }) {
       <svg width={W} height={H} style={{ position: "absolute", left: 0, top: 0 }}>
         {/* main scale beam */}
         <line x1={PX} y1={MAIN_Y} x2={PX + PW} y2={MAIN_Y}
-          stroke={C.ink} strokeWidth={HAIR * 1.5}
+          stroke={RULER} strokeWidth={HAIR * 1.5}
           strokeDasharray={PW} strokeDashoffset={PW * (1 - beam)} />
 
         {mains.map((m, i) => {
-          const len = m.major ? 34 : 20;
-          const near = Math.abs(m.px - x(TARGET)) < 3;
+          // the graduation the sub-scale lands on takes full major length and
+          // the accent, so the coincidence is visible on both scales
+          const hot = m.meets ? lock : 0;
+          const len = (m.major || m.meets ? 34 : 20) + hot * 8;
           return (
             <line key={"m" + i} x1={m.px} y1={MAIN_Y} x2={m.px} y2={MAIN_Y - len}
-              stroke={near ? C.signal : m.major ? C.ink : C.rule25}
-              strokeWidth={m.major ? HAIR * 1.5 : HAIR} opacity={m.on} />
+              stroke={hot > 0.05 ? C.signal : m.major ? RULER : C.rule25}
+              strokeWidth={hot > 0.05 ? HAIR * 2 : m.major ? HAIR * 1.5 : HAIR}
+              opacity={m.on} />
           );
         })}
 
@@ -153,39 +170,51 @@ function Optimise({ tw }) {
           const len = 18 + (d.aligned ? 10 * hot : 0);
           return (
             <line key={"d" + d.k} x1={d.px} y1={SUB_Y} x2={d.px} y2={SUB_Y + len}
-              stroke={d.aligned && hot > 0.05 ? C.signal : C.slate}
+              stroke={d.aligned && hot > 0.05 ? C.signal : RULER}
               strokeWidth={d.aligned && hot > 0.05 ? HAIR * 2 : HAIR} opacity={on} />
           );
         })}
 
         {/* the aligned division, carried up through the main scale */}
         {lock > 0.02 ? (
-          <line x1={divs[ALIGNED].px} y1={MAIN_Y - 34} x2={divs[ALIGNED].px} y2={SUB_Y + 28}
+          <line x1={divs[ALIGNED].px} y1={MAIN_Y - 42} x2={divs[ALIGNED].px} y2={SUB_Y + 28}
             stroke={C.signal} strokeWidth={HAIR} opacity={lock * 0.55}
             strokeDasharray="6 6" />
         ) : null}
 
-        {/* pointer: the reading itself, the one accent-blue indicator */}
+        {/* pointer: an arrowhead bearing down on the reading, carrying the
+            basis-point change it represents */}
         <g opacity={pointer}>
-          <line x1={x(TARGET)} y1={MAIN_Y - 74} x2={x(TARGET)} y2={SUB_Y + SUB_H + 10}
+          <line x1={x(TARGET)} y1={MAIN_Y - 62} x2={x(TARGET)} y2={SUB_Y + SUB_H + 10}
             stroke={C.signal} strokeWidth={HAIR * 2} />
-          <rect x={x(TARGET) - 7} y={MAIN_Y - 88} width={14} height={14} fill={C.signal} />
+          <path d={`M${x(TARGET) - 11} ${MAIN_Y - 78} L${x(TARGET) + 11} ${MAIN_Y - 78} L${x(TARGET)} ${MAIN_Y - 58} Z`}
+            fill={C.signal} />
         </g>
       </svg>
+
+      {/* the reading, travelling with the pointer */}
+      <div style={{
+        position: "absolute", left: x(TARGET) - 120, top: MAIN_Y - 128, width: 240,
+        textAlign: "center", opacity: pointer,
+        font: t.micro, letterSpacing: TRACK, color: C.signal,
+        whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums"
+      }}>+{bps.toFixed(1)} BP</div>
 
       {/* main scale numerals */}
       {mains.filter((m) => m.major).map((m, i) => (
         <div key={"l" + i} style={{
-          position: "absolute", left: m.px - 50, top: MAIN_Y - 128, width: 100, textAlign: "center",
+          position: "absolute", left: m.px - 50, top: MAIN_Y - 100, width: 100, textAlign: "center",
           font: t.micro, letterSpacing: TRACK, color: C.label,
           opacity: labels * m.on, whiteSpace: "nowrap"
         }}>{m.p.toFixed(0)}</div>
       ))}
 
-      {/* sub-scale numerals */}
+      {/* sub-scale numerals — division 0 sits under the pointer, so it steps
+          left to clear the accent rule */}
       {divs.map((d) => (
         <div key={"dl" + d.k} style={{
-          position: "absolute", left: d.px - 15, top: SUB_Y + 34, width: 30, textAlign: "center",
+          position: "absolute", left: d.px - 15 - (d.k === 0 ? 17 : 0), top: SUB_Y + 34,
+          width: 30, textAlign: "center",
           font: t.micro, letterSpacing: TRACK,
           color: d.aligned && lock > 0.05 ? C.signal : C.label,
           opacity: d.on * subIn, whiteSpace: "nowrap"
@@ -197,9 +226,9 @@ function Optimise({ tw }) {
         display: "flex", alignItems: "baseline", gap: 24,
         font: t.micro, letterSpacing: TRACK, color: C.label, opacity: labels
       }}>
-        <span style={{ whiteSpace: "nowrap" }}>PRICE SCALE · £ PER UNIT</span>
+        <span style={{ whiteSpace: "nowrap" }}>PRICE SCALE · BASIS POINTS VS LIST</span>
         <span style={{ flex: 1 }} />
-        <span style={{ whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>SPAN £{fmt1(span)}</span>
+        <span style={{ whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>SPAN {fmt1(span)} BP</span>
         <span style={{
           whiteSpace: "nowrap", color: lock > 0.05 ? C.signal : C.label,
           opacity: clamp(subIn * 1.2, 0, 1)
@@ -222,11 +251,34 @@ function Optimise({ tw }) {
               font: cell.hero ? t.hero : t.fig, color: cell.c,
               fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap"
             }}>{cell.v}</span>
-            <span style={{
-              font: t.micro, letterSpacing: TRACK,
-              color: cell.noteC || C.label, whiteSpace: "nowrap",
-              opacity: cell.noteO == null ? 1 : cell.noteO
-            }}>{cell.note}</span>
+            {cell.slider ? (
+              /* the narrowing, as a track: accent while it closes in, green on
+                 arrival, with the word swapping under the same clock */
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ flex: 1, minWidth: 0, height: 8, background: C.well, position: "relative" }}>
+                  <span style={{
+                    display: "block", height: 8, width: `${ez * 100}%`,
+                    background: optimised > 0.5 ? C.pos : C.signal
+                  }} />
+                  <span style={{
+                    position: "absolute", top: -4, left: `${ez * 100}%`,
+                    width: 16, height: 16, marginLeft: -8,
+                    background: optimised > 0.5 ? C.pos : C.signal,
+                    transform: `scale(${clamp(0.7 + optimised * 0.3, 0.7, 1)})`
+                  }} />
+                </span>
+                <span style={{
+                  flex: "none", font: t.micro, letterSpacing: TRACK, whiteSpace: "nowrap",
+                  color: optimised > 0.5 ? C.pos : C.label
+                }}>{optimised > 0.5 ? "OPTIMISED" : "NARROWING"}</span>
+              </div>
+            ) : (
+              <span style={{
+                font: t.micro, letterSpacing: TRACK,
+                color: cell.noteC || C.label, whiteSpace: "nowrap",
+                opacity: cell.noteO == null ? 1 : cell.noteO
+              }}>{cell.note}</span>
+            )}
           </div>
         ))}
       </div>
@@ -259,7 +311,7 @@ function OptimisePlotPiece() {
       </CompositionStage>
       <TweaksPanel>
         <TweakSection label="Caliper" />
-        <TweakSlider label="Zoom depth" value={tw.depth} min={12} max={48} step={4} unit=" £span" onChange={(v) => setTweak("depth", v)} />
+        <TweakSlider label="Zoom depth" value={tw.depth} min={12} max={48} step={4} unit=" bp span" onChange={(v) => setTweak("depth", v)} />
         <TweakSection label="Loop" />
         <TweakSlider label="Cross-fade floor" value={tw.loopFloor} min={0} max={0.5} step={0.05} onChange={(v) => setTweak("loopFloor", v)} />
       </TweaksPanel>
