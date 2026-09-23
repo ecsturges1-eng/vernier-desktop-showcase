@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- data-preload-hints: start React, ReactDOM, Babel and the scene sources in parallel instead of as a serial chain -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" as="script" href="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous">
+<link rel="preload" as="script" href="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous">
+<link rel="preload" as="script" href="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous">
+<link rel="preload" as="fetch" href="./animations-v3.jsx" crossorigin="anonymous">
+<link rel="preload" as="fetch" href="./tweaks-panel.jsx" crossorigin="anonymous">
+<link rel="preload" as="fetch" href="./product-shared.jsx" crossorigin="anonymous">
+<link rel="preload" as="fetch" href="./product-analyst-scene.jsx" crossorigin="anonymous">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/colors.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/typography.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/surface.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/base.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/styles.css">
+<script src="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/_ds_bundle.js"></script>
+<style>
+html,body{margin:0;height:100%;background:#FFFFFF}
+a{color:var(--accent)}
+a:hover{color:var(--accent-hover)}
+</style>
+<script>window.OM_SCENES = '[{"name":"Opportunities","dur":9.4,"desc":"A commercial question is typed and sent. Vernier names each source as it reads it, then lists two fee moves in revenue terms: raise mid-market cross-border interchange++ for margin, lower enterprise blended MDR to retain volume. Net uplift counts to £2.22m."},{"name":"Retrieve","dur":9.2,"desc":"The thread scrolls to the retrieval request. Vernier searches the governance library and returns the September 2025 Board paper with three extracted passages and page references. Hold, then reset."}]';</script>
+<script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
+<script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "loopFloor": 0
+}/*EDITMODE-END*/;</script>
+</helmet>
+<x-import component-from-global-scope="AnalystPiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./product-shared.jsx ./product-analyst-scene.jsx" hint-size="100%,100%"></x-import>
+</x-dc>
+</body>
+</html>
