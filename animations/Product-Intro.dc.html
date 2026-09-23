@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- data-preload-hints: start React, ReactDOM, Babel and the scene sources in parallel instead of as a serial chain -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" as="script" href="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous">
+<link rel="preload" as="script" href="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous">
+<link rel="preload" as="script" href="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous">
+<link rel="preload" as="fetch" href="./animations-v3.jsx" crossorigin="anonymous">
+<link rel="preload" as="fetch" href="./tweaks-panel.jsx" crossorigin="anonymous">
+<link rel="preload" as="fetch" href="./product-shared.jsx" crossorigin="anonymous">
+<link rel="preload" as="fetch" href="./product-intro-scene.jsx" crossorigin="anonymous">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/colors.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/typography.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/surface.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/tokens/base.css">
+<link rel="stylesheet" href="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/styles.css">
+<script src="_ds/vernier-design-system-3-89b06bb5-4be9-40f3-9f87-18cd35a8074d/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#FFFFFF}
+[data-omelette-chrome]{display:none !important;}
+[data-om-starter]{background:#FFFFFF !important}
+[data-om-starter] svg{box-shadow:none !important}
+a{color:#2E4BA0}
+a:hover{color:#263F87}
+</style>
+<script>window.OM_SCENES = '[{"name":"Datum","dur":1.6,"desc":"The datum draws down the left, its symbol stamps on the base."},{"name":"Outline","dur":2,"desc":"The outline draws itself clockwise from the top left, then the centre line and the graduations along the top edge."},{"name":"Dimension","dur":2.4,"desc":"The break line sets the measured segment, extension lines drop, and the two dimension lines wipe out to their arrowheads while the figures count."},{"name":"Read","dur":2,"desc":"Tolerance leader, title block, and the lock mark on the break. The drawing then holds."}]';</script>
+<script>window.OM_PLAYBACK = '{"mode":"times","count":1}';</script>
+<script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "lockMark": true
+}/*EDITMODE-END*/;</script>
+</helmet>
+<x-import component-from-global-scope="IntroPiece" from="./animations-v3.jsx ./tweaks-panel.jsx ./product-shared.jsx ./product-intro-scene.jsx" hint-size="100%,100%"></x-import>
+</x-dc>
+</body>
+</html>
