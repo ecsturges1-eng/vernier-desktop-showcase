@@ -6,10 +6,10 @@ const { Badge, Figure } = DS;
 
 // Narrow companion to the desktop reel: same four stages, same cue names, one
 // column. Content is trimmed rather than shrunk — nothing is set below 13px.
-const W = 390, H = 760;
+const W = 390, H = 700;
 const PAD = 24, PAD_B = 28;
 const INNER = W - PAD * 2;
-const BODY_T = 124;
+const BODY_T = 104;
 const R = 0;
 
 const MOTION = { enter: Easing.easeOutCubic, draw: Easing.easeInOutQuart };
@@ -54,7 +54,7 @@ const rev = (f) => AUM * (f / 10000) * ret(f);
 const margin = (f) => (rev(f) - COST) / rev(f);
 const M0 = margin(CURRENT), R0 = rev(CURRENT), O0 = 1 - ret(CURRENT);
 
-const GW = INNER, GH = 186, F0 = 64, F1 = 88;
+const GW = INNER, GH = 150, F0 = 64, F1 = 88;
 const R_LO = Math.min(rev(F0), rev(F1)), R_HI = rev(OPTIMUM);
 const R_PAD = (R_HI - R_LO) * 0.08;
 const Y = (r) => GH - ((r - (R_LO - R_PAD)) / (R_HI + R_PAD - (R_LO - R_PAD))) * GH;
@@ -182,7 +182,7 @@ function FeedRow({ row, s }) {
 
 function Step({ row, done }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12, height: 50, boxSizing: "border-box", borderTop: `1px solid ${C.border}` }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 12, height: 44, boxSizing: "border-box", borderTop: `1px solid ${C.border}` }}>
       <span style={{
         width: 9, height: 9, flex: "none", borderRadius: 2,
         background: done > 0.5 ? C.positive : "transparent",
@@ -208,7 +208,7 @@ function Step({ row, done }) {
 function Doc({ row, appear }) {
   return (
     <div style={{
-      display: "flex", flexDirection: "column", gap: 5, height: 46, boxSizing: "border-box", justifyContent: "center",
+      display: "flex", flexDirection: "column", gap: 4, height: 42, boxSizing: "border-box", justifyContent: "center",
       padding: "0 14px", borderTop: `1px solid ${C.border}`, opacity: appear, transform: `translateY(${(1 - appear) * 6}px)`
     }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
@@ -227,18 +227,18 @@ function Metric({ label, value, delta, unit, appear }) {
   return (
     <div style={{
       minWidth: 0, boxSizing: "border-box", border: `1px solid ${C.border}`, borderRadius: R,
-      padding: "12px 14px", display: "flex", flexDirection: "column", gap: 10,
+      padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8,
       opacity: appear, transform: `translateY(${(1 - appear) * 8}px)`
     }}>
       <span style={{ ...MONO_10, color: C.label, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
-      <Figure value={value} size="md" delta={signed} direction={flat ? "flat" : delta > 0 ? "up" : "down"} />
+      <Figure value={value} size="sm" delta={signed} direction={flat ? "flat" : delta > 0 ? "up" : "down"} />
     </div>
   );
 }
 
 function Reel() {
   const { T, CUES, authoredTotal } = useComposition();
-  const total = authoredTotal || 30.1;
+  const total = authoredTotal || 26.4;
 
   const stage = clamp(track([
     [0, 0],
@@ -262,21 +262,21 @@ function Reel() {
   });
 
   const f = track([
-    [0, CURRENT], [CUES.Model + 0.4, CURRENT], [CUES.Model + 3.3, OPTIMUM],
+    [0, CURRENT], [CUES.Model + 0.25, CURRENT], [CUES.Model + 1.9, OPTIMUM],
     [CUES.Return + 0.5, OPTIMUM], [CUES.Return + 1.2, CURRENT], [total, CURRENT]
   ], T);
   const m = margin(f), r = rev(f), out = 1 - ret(f);
-  const gDraw = animate({ from: 0, to: 1, start: CUES.Model + 0.08, end: CUES.Model + 1.0, ease: MOTION.draw })(T);
-  const met = (i) => animate({ from: 0, to: 1, start: CUES.Outcome + 0.06 + 0.1 * i, end: CUES.Outcome + 0.6 + 0.1 * i, ease: MOTION.enter })(T) * k;
-  const sumIn = animate({ from: 0, to: 1, start: CUES.Optimise + 0.12, end: CUES.Optimise + 0.8, ease: MOTION.enter })(T) * k;
+  const gDraw = animate({ from: 0, to: 1, start: CUES.Model + 0.04, end: CUES.Model + 0.7, ease: MOTION.draw })(T);
+  const met = (i) => animate({ from: 0, to: 1, start: CUES.Outcome + 0.02 + 0.08 * i, end: CUES.Outcome + 0.45 + 0.08 * i, ease: MOTION.enter })(T) * k;
+  const sumIn = animate({ from: 0, to: 1, start: CUES.Optimise + 0.05, end: CUES.Optimise + 0.5, ease: MOTION.enter })(T) * k;
 
   const stepAt = (i) => animate({ from: 0, to: 1, start: CUES.Govern + 0.15 + 0.34 * i, end: CUES.Govern + 0.75 + 0.34 * i, ease: MOTION.enter })(T) * k;
   const expand = animate({ from: 0, to: 1, start: CUES.Clear + 0.1, end: CUES.Clear + 0.8, ease: MOTION.draw })(T) * k;
   const scanAt = (i) => animate({ from: 0, to: 1, start: CUES.Clear + 0.55 + 0.32 * i, end: CUES.Clear + 1.15 + 0.32 * i, ease: MOTION.enter })(T) * k;
 
-  const docAt = (c, i) => animate({ from: 0, to: 1, start: CUES.Repository + 0.12 + 0.44 * c + 0.12 * i, end: CUES.Repository + 0.65 + 0.44 * c + 0.12 * i, ease: MOTION.enter })(T) * k;
-  const panelAt = (c) => animate({ from: 0, to: 1, start: CUES.Repository + 0.04 + 0.44 * c, end: CUES.Repository + 0.44 + 0.44 * c, ease: MOTION.enter })(T) * k;
-  const ratIn = (i) => animate({ from: 0, to: 1, start: CUES.Rationale + 0.1 + 0.35 * i, end: CUES.Rationale + 0.8 + 0.35 * i, ease: MOTION.enter })(T) * k;
+  const docAt = (c, i) => animate({ from: 0, to: 1, start: CUES.Repository + 0.08 + 0.3 * c + 0.1 * i, end: CUES.Repository + 0.5 + 0.3 * c + 0.1 * i, ease: MOTION.enter })(T) * k;
+  const panelAt = (c) => animate({ from: 0, to: 1, start: CUES.Repository + 0.02 + 0.3 * c, end: CUES.Repository + 0.35 + 0.3 * c, ease: MOTION.enter })(T) * k;
+  const ratIn = (i) => animate({ from: 0, to: 1, start: CUES.Rationale + 0.05 + 0.25 * i, end: CUES.Rationale + 0.6 + 0.25 * i, ease: MOTION.enter })(T) * k;
 
   const idx = clamp(Math.round(stage), 0, 3);
   const SPANS = [[CUES.Ingest, CUES.Handoff], [CUES.Optimise, CUES.Deliver], [CUES.Govern, CUES.Evidence], [CUES.Repository, CUES.Return]];
@@ -287,7 +287,7 @@ function Reel() {
 
   return (
     <div style={{ position: "absolute", inset: 0, background: C.bg, overflow: "hidden", fontFamily: "var(--font-sans)" }}>
-      <div style={{ position: "absolute", left: PAD, top: 46, width: INNER }}>
+      <div style={{ position: "absolute", left: PAD, top: 36, width: INNER }}>
         <Header idx={idx} within={within} />
       </div>
 
@@ -308,16 +308,16 @@ function Reel() {
           <span style={{ font: "500 28px/1 var(--font-mono)", letterSpacing: "-0.01em", color: C.text, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
             0.72% <span style={{ color: C.label }}>→</span> <span style={{ color: C.accent }}>0.78%</span>
           </span>
-          <span style={{ font: "400 13px/1.5 var(--font-sans)", color: C.dim }}>
+          <span style={{ font: "400 13px/1.45 var(--font-sans)", color: C.dim, textWrap: "pretty" }}>
             Protects £45.41m of annual net revenue, £1.38m above the current schedule. Confidence 0.94.
           </span>
         </div>
 
-        <div style={{ marginTop: 20, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+        <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span style={{ ...MONO_10, color: C.label }}>NET REVENUE · £M</span>
           <span style={{ ...MONO_10, color: C.accent }}>{f.toFixed(2)}BPS</span>
         </div>
-        <svg width={GW} height={GH + 10} viewBox={`0 0 ${GW} ${GH + 10}`} style={{ display: "block", marginTop: 12 }}>
+        <svg width={GW} height={GH + 10} viewBox={`0 0 ${GW} ${GH + 10}`} style={{ display: "block", marginTop: 10 }}>
           {GRIDS.map((g, i) => <line key={i} x1="0" y1={Y(g)} x2={GW} y2={Y(g)} stroke={C.border} strokeWidth="1" />)}
           <line x1={X(CURRENT)} y1="0" x2={X(CURRENT)} y2={GH} stroke={C.borderStrong} strokeWidth="1" strokeDasharray="4 6" />
           <path d={GAIN(f)} fill={C.positiveTint} opacity={gDraw} />
@@ -332,7 +332,7 @@ function Reel() {
           <span>{F0}.00</span><span>ONGOING CHARGE, BPS</span><span>{F1}.00</span>
         </div>
 
-        <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: 10 }}>
           <Metric label="OPERATING MARGIN, %" value={(m * 100).toFixed(2)} delta={(m - M0) * 100} unit="pp" appear={met(0)} />
           <Metric label="NET REVENUE, £M" value={(r / 1e6).toFixed(2)} delta={(r - R0) / 1e6} unit="m" appear={met(1)} />
         </div>

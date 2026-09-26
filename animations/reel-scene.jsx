@@ -292,40 +292,40 @@ function Doc({ row, appear }) {
 
 function Reel({ tw }) {
   const { T, CUES, authoredTotal } = useComposition();
-  const total = authoredTotal || 30.1;
+  const total = authoredTotal || 24.5;
 
   // One continuous stage index; sections cross-slide off it.
   const stage = clamp(track([
     [0, 0],
-    [CUES.Handoff + 0.15, 0], [CUES.Handoff + 1.3, 1],
-    [CUES.Deliver + 0.15, 1], [CUES.Deliver + 1.3, 2],
-    [CUES.Evidence + 0.15, 2], [CUES.Evidence + 1.3, 3],
-    [CUES.Return + 0.3, 3], [CUES.Return + 1.9, 0], [total, 0]
+    [CUES.Handoff + 0.1, 0], [CUES.Handoff + 1.0, 1],
+    [CUES.Deliver + 0.1, 1], [CUES.Deliver + 1.0, 2],
+    [CUES.Evidence + 0.1, 2], [CUES.Evidence + 1.0, 3],
+    [CUES.Return + 0.2, 3], [CUES.Return + 1.4, 0], [total, 0]
   ], T), 0, 3);
 
   const sec = (i) => {
     const d = stage - i;
     return { o: clamp(1 - Math.abs(d) * 2.1, 0, 1), y: -40 * d };
   };
-  const reset = animate({ from: 0, to: 1, start: CUES.Return + 0.15, end: CUES.Return + 0.85, ease: MOTION.draw })(T);
+  const reset = animate({ from: 0, to: 1, start: CUES.Return + 0.1, end: CUES.Return + 0.7, ease: MOTION.draw })(T);
   const k = 1 - reset;
 
   // 01 · data lines draw, then the interpreted headline is generated
   const rowAt = (i) => ({
     line: animate({ from: 0, to: 1, start: CUES.Ingest + 0.08 + 0.18 * i, end: CUES.Ingest + 0.83 + 0.18 * i, ease: MOTION.draw })(T) * k,
-    box: animate({ from: 0, to: 1, start: CUES.Interpret + 0.06 + 0.32 * i, end: CUES.Interpret + 0.56 + 0.32 * i, ease: MOTION.enter })(T) * k,
-    wipe: animate({ from: 0, to: 1, start: CUES.Interpret + 0.2 + 0.32 * i, end: CUES.Interpret + 0.85 + 0.32 * i, ease: MOTION.draw })(T) * k
+    box: animate({ from: 0, to: 1, start: CUES.Interpret + 0.06 + 0.38 * i, end: CUES.Interpret + 0.56 + 0.38 * i, ease: MOTION.enter })(T) * k,
+    wipe: animate({ from: 0, to: 1, start: CUES.Interpret + 0.2 + 0.38 * i, end: CUES.Interpret + 0.85 + 0.38 * i, ease: MOTION.draw })(T) * k
   });
 
   // 02 · one slow, short sweep from current pricing to the modelled optimum
   const f = track([
-    [0, CURRENT], [CUES.Model + 0.4, CURRENT], [CUES.Model + 3.3, OPTIMUM],
-    [CUES.Return + 0.5, OPTIMUM], [CUES.Return + 1.2, CURRENT], [total, CURRENT]
+    [0, CURRENT], [CUES.Model + 0.25, CURRENT], [CUES.Model + 1.9, OPTIMUM],
+    [CUES.Return + 0.3, OPTIMUM], [CUES.Return + 1.0, CURRENT], [total, CURRENT]
   ], T);
   const m = margin(f), r = rev(f), out = 1 - ret(f);
-  const gDraw = animate({ from: 0, to: 1, start: CUES.Model + 0.08, end: CUES.Model + 1.0, ease: MOTION.draw })(T);
-  const met = (i) => animate({ from: 0, to: 1, start: CUES.Outcome + 0.06 + 0.1 * i, end: CUES.Outcome + 0.6 + 0.1 * i, ease: MOTION.enter })(T) * k;
-  const sumIn = animate({ from: 0, to: 1, start: CUES.Optimise + 0.12, end: CUES.Optimise + 0.8, ease: MOTION.enter })(T) * k;
+  const gDraw = animate({ from: 0, to: 1, start: CUES.Model + 0.04, end: CUES.Model + 0.7, ease: MOTION.draw })(T);
+  const met = (i) => animate({ from: 0, to: 1, start: CUES.Outcome + 0.02 + 0.08 * i, end: CUES.Outcome + 0.45 + 0.08 * i, ease: MOTION.enter })(T) * k;
+  const sumIn = animate({ from: 0, to: 1, start: CUES.Optimise + 0.05, end: CUES.Optimise + 0.5, ease: MOTION.enter })(T) * k;
 
   // 03 · steps resolve in turn, then the compliance centre expands and scans
   const stepAt = (i) => animate({ from: 0, to: 1, start: CUES.Govern + 0.15 + 0.34 * i, end: CUES.Govern + 0.75 + 0.34 * i, ease: MOTION.enter })(T) * k;
@@ -333,10 +333,10 @@ function Reel({ tw }) {
   const scanAt = (i) => animate({ from: 0, to: 1, start: CUES.Clear + 0.55 + 0.32 * i, end: CUES.Clear + 1.15 + 0.32 * i, ease: MOTION.enter })(T) * k;
 
   // 04 · the repository fills panel by panel, then the rationale states itself
-  const docAt = (c, i) => animate({ from: 0, to: 1, start: CUES.Repository + 0.12 + 0.44 * c + 0.12 * i, end: CUES.Repository + 0.65 + 0.44 * c + 0.12 * i, ease: MOTION.enter })(T) * k;
-  const panelAt = (c) => animate({ from: 0, to: 1, start: CUES.Repository + 0.04 + 0.44 * c, end: CUES.Repository + 0.44 + 0.44 * c, ease: MOTION.enter })(T) * k;
-  const ratIn = animate({ from: 0, to: 1, start: CUES.Rationale + 0.08, end: CUES.Rationale + 0.7, ease: MOTION.enter })(T) * k;
-  const ratWipe = (i) => animate({ from: 0, to: 1, start: CUES.Rationale + 0.25 + 0.4 * i, end: CUES.Rationale + 0.95 + 0.4 * i, ease: MOTION.draw })(T) * k;
+  const docAt = (c, i) => animate({ from: 0, to: 1, start: CUES.Repository + 0.08 + 0.3 * c + 0.1 * i, end: CUES.Repository + 0.5 + 0.3 * c + 0.1 * i, ease: MOTION.enter })(T) * k;
+  const panelAt = (c) => animate({ from: 0, to: 1, start: CUES.Repository + 0.02 + 0.3 * c, end: CUES.Repository + 0.35 + 0.3 * c, ease: MOTION.enter })(T) * k;
+  const ratIn = animate({ from: 0, to: 1, start: CUES.Rationale + 0.05, end: CUES.Rationale + 0.5, ease: MOTION.enter })(T) * k;
+  const ratWipe = (i) => animate({ from: 0, to: 1, start: CUES.Rationale + 0.15 + 0.28 * i, end: CUES.Rationale + 0.75 + 0.28 * i, ease: MOTION.draw })(T) * k;
 
   const idx = clamp(Math.round(stage), 0, 3);
   const SPANS = [[CUES.Ingest, CUES.Handoff], [CUES.Optimise, CUES.Deliver], [CUES.Govern, CUES.Evidence], [CUES.Repository, CUES.Return]];
@@ -426,7 +426,7 @@ function Reel({ tw }) {
             </div>
           </div>
 
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
             <Metric label="Operating margin" value={`${(m * 100).toFixed(2)}%`} delta={(m - M0) * 100} unit="pp" confidence={0.94} appear={met(0)} />
             <Metric label="Net revenue, annualised" value={`£${(r / 1e6).toFixed(2)}m`} delta={(r - R0) / 1e6} unit="m" confidence={0.94} appear={met(1)} />
             <Metric label="Outflow at risk" value={`${(out * 100).toFixed(2)}%`} delta={(out - O0) * 100} unit="pp" invert confidence={0.88} appear={met(2)} />
